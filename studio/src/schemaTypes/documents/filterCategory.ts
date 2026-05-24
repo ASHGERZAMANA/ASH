@@ -1,11 +1,13 @@
 import {defineField, defineType} from 'sanity'
 import {TagIcon} from '@sanity/icons'
+import {orderRankField, orderRankOrdering} from '@sanity/orderable-document-list'
 
 export const filterCategory = defineType({
   name: 'filterCategory',
   title: 'Filter',
   type: 'document',
   icon: TagIcon,
+  orderings: [orderRankOrdering],
   fields: [
     defineField({
       name: 'title',
@@ -20,19 +22,7 @@ export const filterCategory = defineType({
       options: {source: 'title', maxLength: 96},
       validation: (rule) => rule.required(),
     }),
-    defineField({
-      name: 'order',
-      title: 'Order',
-      type: 'number',
-      description: 'Lower numbers appear first.',
-    }),
-  ],
-  orderings: [
-    {
-      title: 'Order',
-      name: 'orderAsc',
-      by: [{field: 'order', direction: 'asc'}],
-    },
+    orderRankField({type: 'filterCategory'}),
   ],
   preview: {
     select: {title: 'title', subtitle: 'slug.current'},

@@ -10,9 +10,18 @@ export const about = defineType({
     {name: 'bio', title: 'Bio', default: true},
     {name: 'links', title: 'CV & Links'},
     {name: 'lists', title: 'Lists'},
+    {name: 'appearance', title: 'Appearance'},
     {name: 'seo', title: 'SEO'},
   ],
   fields: [
+    defineField({
+      name: 'bgColor',
+      title: 'Background color',
+      type: 'color',
+      group: 'appearance',
+      description:
+        'Background color for the About page. Use the slider for opacity. Falls back to site background if blank.',
+    }),
     defineField({
       name: 'bioImage',
       title: 'Bio image',
@@ -41,14 +50,6 @@ export const about = defineType({
       title: 'Availability status',
       type: 'string',
       group: 'bio',
-      options: {
-        list: [
-          {title: 'Available', value: 'available'},
-          {title: 'Booked', value: 'booked'},
-          {title: 'Not taking work', value: 'unavailable'},
-        ],
-        layout: 'radio',
-      },
     }),
     defineField({
       name: 'email',

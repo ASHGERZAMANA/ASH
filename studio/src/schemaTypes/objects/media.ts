@@ -67,22 +67,15 @@ export const media = defineType({
           return true
         }),
     }),
-    defineField({
-      name: 'caption',
-      title: 'Caption',
-      type: 'string',
-    }),
   ],
   preview: {
     select: {
       type: 'type',
       image: 'image',
-      caption: 'caption',
     },
-    prepare({type, image, caption}) {
+    prepare({type, image}) {
       return {
-        title: caption || (type === 'video' ? 'Video' : 'Image'),
-        subtitle: type === 'video' ? 'Video' : 'Image',
+        title: type === 'video' ? 'Video' : 'Image',
         media: type === 'video' ? PlayIcon : image || ImageIcon,
       }
     },

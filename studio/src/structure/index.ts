@@ -1,9 +1,10 @@
 import {CogIcon, UserIcon, ProjectsIcon, TagIcon} from '@sanity/icons'
 import type {StructureResolver} from 'sanity/structure'
+import {orderableDocumentListDeskItem} from '@sanity/orderable-document-list'
 
 const SINGLETON_TYPES = new Set(['about', 'settings'])
 
-export const structure: StructureResolver = (S) =>
+export const structure: StructureResolver = (S, context) =>
   S.list()
     .title('Content')
     .items([
@@ -11,10 +12,13 @@ export const structure: StructureResolver = (S) =>
         .title('Projects')
         .icon(ProjectsIcon)
         .child(S.documentTypeList('project').title('Projects')),
-      S.listItem()
-        .title('Filters')
-        .icon(TagIcon)
-        .child(S.documentTypeList('filterCategory').title('Filters')),
+      orderableDocumentListDeskItem({
+        type: 'filterCategory',
+        title: 'Filters',
+        icon: TagIcon,
+        S,
+        context,
+      }),
       S.divider(),
       S.listItem()
         .title('About')

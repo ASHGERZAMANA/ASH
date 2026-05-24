@@ -15,6 +15,233 @@
 export declare const internalGroqTypeReferenceTo: unique symbol
 
 // Source: ../sanity.schema.json
+export type SanityImageAssetReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+}
+
+export type Seo = {
+  _type: 'seo'
+  title?: string
+  description?: string
+  ogImage?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  noIndex?: boolean
+}
+
+export type SanityFileAssetReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'sanity.fileAsset'
+}
+
+export type Media = {
+  _type: 'media'
+  type: 'image' | 'video'
+  image?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  video?: {
+    asset?: SanityFileAssetReference
+    media?: unknown
+    _type: 'file'
+  }
+}
+
+export type FilterCategory = {
+  _id: string
+  _type: 'filterCategory'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title: string
+  slug: Slug
+  orderRank?: string
+}
+
+export type Slug = {
+  _type: 'slug'
+  current: string
+  source?: string
+}
+
+export type FilterCategoryReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'filterCategory'
+}
+
+export type Project = {
+  _id: string
+  _type: 'project'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  projectName: string
+  slug: Slug
+  projectNumber?: string
+  clientName?: string
+  projectDescription?: Array<{
+    children?: Array<{
+      marks?: Array<string>
+      text?: string
+      _type: 'span'
+      _key: string
+    }>
+    style?: 'normal' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote'
+    listItem?: 'bullet' | 'number'
+    markDefs?: Array<{
+      href?: string
+      _type: 'link'
+      _key: string
+    }>
+    level?: number
+    _type: 'block'
+    _key: string
+  }>
+  mainMedia: Media
+  mainHoverImage?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  projectMedia?: Array<
+    {
+      _key: string
+    } & Media
+  >
+  filters?: Array<
+    {
+      _key: string
+    } & FilterCategoryReference
+  >
+  seo?: Seo
+}
+
+export type SanityImageCrop = {
+  _type: 'sanity.imageCrop'
+  top: number
+  bottom: number
+  left: number
+  right: number
+}
+
+export type SanityImageHotspot = {
+  _type: 'sanity.imageHotspot'
+  x: number
+  y: number
+  height: number
+  width: number
+}
+
+export type Settings = {
+  _id: string
+  _type: 'settings'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  bgColor?: Color
+  defaultSeo?: Seo
+}
+
+export type Color = {
+  _type: 'color'
+  hex?: string
+  alpha?: number
+  hsl?: HslaColor
+  hsv?: HsvaColor
+  rgb?: RgbaColor
+}
+
+export type About = {
+  _id: string
+  _type: 'about'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  bgColor?: Color
+  bioImage?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  bioName?: string
+  bio?: Array<{
+    children?: Array<{
+      marks?: Array<string>
+      text?: string
+      _type: 'span'
+      _key: string
+    }>
+    style?: 'normal' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote'
+    listItem?: 'bullet' | 'number'
+    markDefs?: Array<{
+      href?: string
+      _type: 'link'
+      _key: string
+    }>
+    level?: number
+    _type: 'block'
+    _key: string
+  }>
+  availabilityStatus?: string
+  email?: string
+  cv?: {
+    asset?: SanityFileAssetReference
+    media?: unknown
+    _type: 'file'
+  }
+  instagramUrl?: string
+  selectedClients?: Array<string>
+  exhibitions?: Array<string>
+  seo?: Seo
+}
+
+export type RgbaColor = {
+  _type: 'rgbaColor'
+  r?: number
+  g?: number
+  b?: number
+  a?: number
+}
+
+export type HsvaColor = {
+  _type: 'hsvaColor'
+  h?: number
+  s?: number
+  v?: number
+  a?: number
+}
+
+export type HslaColor = {
+  _type: 'hslaColor'
+  h?: number
+  s?: number
+  l?: number
+  a?: number
+}
+
 export type SanityImagePaletteSwatch = {
   _type: 'sanity.imagePaletteSwatch'
   background?: string
@@ -51,22 +278,6 @@ export type SanityImageMetadata = {
   thumbHash?: string
   hasAlpha?: boolean
   isOpaque?: boolean
-}
-
-export type SanityImageHotspot = {
-  _type: 'sanity.imageHotspot'
-  x: number
-  y: number
-  height: number
-  width: number
-}
-
-export type SanityImageCrop = {
-  _type: 'sanity.imageCrop'
-  top: number
-  bottom: number
-  left: number
-  right: number
 }
 
 export type SanityFileAsset = {
@@ -128,21 +339,476 @@ export type Geopoint = {
   alt?: number
 }
 
-export type Slug = {
-  _type: 'slug'
-  current: string
-  source?: string
-}
-
 export type AllSanitySchemaTypes =
+  | SanityImageAssetReference
+  | Seo
+  | SanityFileAssetReference
+  | Media
+  | FilterCategory
+  | Slug
+  | FilterCategoryReference
+  | Project
+  | SanityImageCrop
+  | SanityImageHotspot
+  | Settings
+  | Color
+  | About
+  | RgbaColor
+  | HsvaColor
+  | HslaColor
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
   | SanityImageMetadata
-  | SanityImageHotspot
-  | SanityImageCrop
   | SanityFileAsset
   | SanityAssetSourceData
   | SanityImageAsset
   | Geopoint
-  | Slug
+
+// Source: sanity/lib/queries.ts
+// Variable: projectSlugsQuery
+// Query: *[_type == "project" && defined(slug.current)]{ "slug": slug.current }
+export type ProjectSlugsQueryResult = Array<{
+  slug: string
+}>
+
+// Source: sanity/lib/queries.ts
+// Variable: adjacentProjectsQuery
+// Query: {    "all": *[_type == "project" && defined(slug.current)] | order(coalesce(projectNumber, projectName) asc){      "slug": slug.current,      projectName,      clientName    }  }
+export type AdjacentProjectsQueryResult = {
+  all: Array<{
+    slug: string
+    projectName: string
+    clientName: string | null
+  }>
+}
+
+// Source: sanity/lib/queries.ts
+// Variable: projectBySlugQuery
+// Query: *[_type == "project" && slug.current == $slug][0]{    _id,    projectName,    "slug": slug.current,    projectNumber,    clientName,    projectInfo,    projectDescription,    mainMedia{      type,      "image": image{..., "asset": asset->},      "video": video{..., "asset": asset->}    },    mainHoverImage{..., "asset": asset->},    projectMedia[]{      type,      "image": image{..., "asset": asset->},      "video": video{..., "asset": asset->}    },    filters[]->{ _id, title, "slug": slug.current },    seo  }
+export type ProjectBySlugQueryResult = {
+  _id: string
+  projectName: string
+  slug: string
+  projectNumber: string | null
+  clientName: string | null
+  projectInfo: null
+  projectDescription: Array<{
+    children?: Array<{
+      marks?: Array<string>
+      text?: string
+      _type: 'span'
+      _key: string
+    }>
+    style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
+    listItem?: 'bullet' | 'number'
+    markDefs?: Array<{
+      href?: string
+      _type: 'link'
+      _key: string
+    }>
+    level?: number
+    _type: 'block'
+    _key: string
+  }> | null
+  mainMedia: {
+    type: 'image' | 'video'
+    image: {
+      asset: {
+        _id: string
+        _type: 'sanity.imageAsset'
+        _createdAt: string
+        _updatedAt: string
+        _rev: string
+        originalFilename?: string
+        label?: string
+        title?: string
+        description?: string
+        altText?: string
+        sha1hash: string
+        extension: string
+        mimeType: string
+        size: number
+        assetId: string
+        uploadId?: string
+        path: string
+        url: string
+        metadata?: SanityImageMetadata
+        source?: SanityAssetSourceData
+      } | null
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      alt?: string
+      _type: 'image'
+    } | null
+    video: {
+      asset: {
+        _id: string
+        _type: 'sanity.fileAsset'
+        _createdAt: string
+        _updatedAt: string
+        _rev: string
+        originalFilename?: string
+        label?: string
+        title?: string
+        description?: string
+        altText?: string
+        sha1hash: string
+        extension: string
+        mimeType: string
+        size: number
+        assetId: string
+        uploadId?: string
+        path: string
+        url: string
+        source?: SanityAssetSourceData
+      } | null
+      media?: unknown
+      _type: 'file'
+    } | null
+  }
+  mainHoverImage: {
+    asset: {
+      _id: string
+      _type: 'sanity.imageAsset'
+      _createdAt: string
+      _updatedAt: string
+      _rev: string
+      originalFilename?: string
+      label?: string
+      title?: string
+      description?: string
+      altText?: string
+      sha1hash: string
+      extension: string
+      mimeType: string
+      size: number
+      assetId: string
+      uploadId?: string
+      path: string
+      url: string
+      metadata?: SanityImageMetadata
+      source?: SanityAssetSourceData
+    } | null
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  } | null
+  projectMedia: Array<{
+    type: 'image' | 'video'
+    image: {
+      asset: {
+        _id: string
+        _type: 'sanity.imageAsset'
+        _createdAt: string
+        _updatedAt: string
+        _rev: string
+        originalFilename?: string
+        label?: string
+        title?: string
+        description?: string
+        altText?: string
+        sha1hash: string
+        extension: string
+        mimeType: string
+        size: number
+        assetId: string
+        uploadId?: string
+        path: string
+        url: string
+        metadata?: SanityImageMetadata
+        source?: SanityAssetSourceData
+      } | null
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      alt?: string
+      _type: 'image'
+    } | null
+    video: {
+      asset: {
+        _id: string
+        _type: 'sanity.fileAsset'
+        _createdAt: string
+        _updatedAt: string
+        _rev: string
+        originalFilename?: string
+        label?: string
+        title?: string
+        description?: string
+        altText?: string
+        sha1hash: string
+        extension: string
+        mimeType: string
+        size: number
+        assetId: string
+        uploadId?: string
+        path: string
+        url: string
+        source?: SanityAssetSourceData
+      } | null
+      media?: unknown
+      _type: 'file'
+    } | null
+  }> | null
+  filters: Array<{
+    _id: string
+    title: string
+    slug: string
+  }> | null
+  seo: Seo | null
+} | null
+
+// Source: sanity/lib/queries.ts
+// Variable: projectsListQuery
+// Query: *[    _type == "project"    && defined(slug.current)    && (count($filters) == 0 || count(filters[@->slug.current in $filters]) > 0)  ] | order(coalesce(projectNumber, projectName) asc){    _id,    projectName,    "slug": slug.current,    clientName,    mainMedia{      type,      "image": image{..., "asset": asset->},      "video": video{..., "asset": asset->}    },    mainHoverImage{..., "asset": asset->},    filters[]->{ "slug": slug.current }  }
+export type ProjectsListQueryResult = Array<{
+  _id: string
+  projectName: string
+  slug: string
+  clientName: string | null
+  mainMedia: {
+    type: 'image' | 'video'
+    image: {
+      asset: {
+        _id: string
+        _type: 'sanity.imageAsset'
+        _createdAt: string
+        _updatedAt: string
+        _rev: string
+        originalFilename?: string
+        label?: string
+        title?: string
+        description?: string
+        altText?: string
+        sha1hash: string
+        extension: string
+        mimeType: string
+        size: number
+        assetId: string
+        uploadId?: string
+        path: string
+        url: string
+        metadata?: SanityImageMetadata
+        source?: SanityAssetSourceData
+      } | null
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      alt?: string
+      _type: 'image'
+    } | null
+    video: {
+      asset: {
+        _id: string
+        _type: 'sanity.fileAsset'
+        _createdAt: string
+        _updatedAt: string
+        _rev: string
+        originalFilename?: string
+        label?: string
+        title?: string
+        description?: string
+        altText?: string
+        sha1hash: string
+        extension: string
+        mimeType: string
+        size: number
+        assetId: string
+        uploadId?: string
+        path: string
+        url: string
+        source?: SanityAssetSourceData
+      } | null
+      media?: unknown
+      _type: 'file'
+    } | null
+  }
+  mainHoverImage: {
+    asset: {
+      _id: string
+      _type: 'sanity.imageAsset'
+      _createdAt: string
+      _updatedAt: string
+      _rev: string
+      originalFilename?: string
+      label?: string
+      title?: string
+      description?: string
+      altText?: string
+      sha1hash: string
+      extension: string
+      mimeType: string
+      size: number
+      assetId: string
+      uploadId?: string
+      path: string
+      url: string
+      metadata?: SanityImageMetadata
+      source?: SanityAssetSourceData
+    } | null
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  } | null
+  filters: Array<{
+    slug: string
+  }> | null
+}>
+
+// Source: sanity/lib/queries.ts
+// Variable: filtersQuery
+// Query: *[_type == "filterCategory"] | order(orderRank asc){    _id,    title,    "slug": slug.current  }
+export type FiltersQueryResult = Array<{
+  _id: string
+  title: string
+  slug: string
+}>
+
+// Source: sanity/lib/queries.ts
+// Variable: aboutQuery
+// Query: *[_id == "about"][0]{    "bgColor": bgColor.rgb,    bioImage{..., "asset": asset->},    bioName,    bio,    availabilityStatus,    selectedClients,    exhibitions,    email,    cv{..., "asset": asset->},    instagramUrl  }
+export type AboutQueryResult =
+  | {
+      bgColor: null
+      bioImage: null
+      bioName: null
+      bio: null
+      availabilityStatus: null
+      selectedClients: null
+      exhibitions: null
+      email: null
+      cv: null
+      instagramUrl: null
+    }
+  | {
+      bgColor: RgbaColor | null
+      bioImage: null
+      bioName: null
+      bio: null
+      availabilityStatus: null
+      selectedClients: null
+      exhibitions: null
+      email: null
+      cv: null
+      instagramUrl: null
+    }
+  | {
+      bgColor: RgbaColor | null
+      bioImage: {
+        asset: {
+          _id: string
+          _type: 'sanity.imageAsset'
+          _createdAt: string
+          _updatedAt: string
+          _rev: string
+          originalFilename?: string
+          label?: string
+          title?: string
+          description?: string
+          altText?: string
+          sha1hash: string
+          extension: string
+          mimeType: string
+          size: number
+          assetId: string
+          uploadId?: string
+          path: string
+          url: string
+          metadata?: SanityImageMetadata
+          source?: SanityAssetSourceData
+        } | null
+        media?: unknown
+        hotspot?: SanityImageHotspot
+        crop?: SanityImageCrop
+        alt?: string
+        _type: 'image'
+      } | null
+      bioName: string | null
+      bio: Array<{
+        children?: Array<{
+          marks?: Array<string>
+          text?: string
+          _type: 'span'
+          _key: string
+        }>
+        style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
+        listItem?: 'bullet' | 'number'
+        markDefs?: Array<{
+          href?: string
+          _type: 'link'
+          _key: string
+        }>
+        level?: number
+        _type: 'block'
+        _key: string
+      }> | null
+      availabilityStatus: string | null
+      selectedClients: Array<string> | null
+      exhibitions: Array<string> | null
+      email: string | null
+      cv: {
+        asset: {
+          _id: string
+          _type: 'sanity.fileAsset'
+          _createdAt: string
+          _updatedAt: string
+          _rev: string
+          originalFilename?: string
+          label?: string
+          title?: string
+          description?: string
+          altText?: string
+          sha1hash: string
+          extension: string
+          mimeType: string
+          size: number
+          assetId: string
+          uploadId?: string
+          path: string
+          url: string
+          source?: SanityAssetSourceData
+        } | null
+        media?: unknown
+        _type: 'file'
+      } | null
+      instagramUrl: string | null
+    }
+  | null
+
+// Source: sanity/lib/queries.ts
+// Variable: settingsQuery
+// Query: *[_id == "settings"][0]{    defaultSeo,    "bgColor": bgColor.rgb  }
+export type SettingsQueryResult =
+  | {
+      defaultSeo: null
+      bgColor: null
+    }
+  | {
+      defaultSeo: null
+      bgColor: RgbaColor | null
+    }
+  | {
+      defaultSeo: Seo | null
+      bgColor: RgbaColor | null
+    }
+  | null
+
+// Query TypeMap
+import '@sanity/client'
+declare module '@sanity/client' {
+  interface SanityQueries {
+    '\n  *[_type == "project" && defined(slug.current)]{ "slug": slug.current }\n': ProjectSlugsQueryResult
+    '\n  {\n    "all": *[_type == "project" && defined(slug.current)] | order(coalesce(projectNumber, projectName) asc){\n      "slug": slug.current,\n      projectName,\n      clientName\n    }\n  }\n': AdjacentProjectsQueryResult
+    '\n  *[_type == "project" && slug.current == $slug][0]{\n    _id,\n    projectName,\n    "slug": slug.current,\n    projectNumber,\n    clientName,\n    projectInfo,\n    projectDescription,\n    mainMedia{\n      type,\n      "image": image{..., "asset": asset->},\n      "video": video{..., "asset": asset->}\n    },\n    mainHoverImage{..., "asset": asset->},\n    projectMedia[]{\n      type,\n      "image": image{..., "asset": asset->},\n      "video": video{..., "asset": asset->}\n    },\n    filters[]->{ _id, title, "slug": slug.current },\n    seo\n  }\n': ProjectBySlugQueryResult
+    '\n  *[\n    _type == "project"\n    && defined(slug.current)\n    && (count($filters) == 0 || count(filters[@->slug.current in $filters]) > 0)\n  ] | order(coalesce(projectNumber, projectName) asc){\n    _id,\n    projectName,\n    "slug": slug.current,\n    clientName,\n    mainMedia{\n      type,\n      "image": image{..., "asset": asset->},\n      "video": video{..., "asset": asset->}\n    },\n    mainHoverImage{..., "asset": asset->},\n    filters[]->{ "slug": slug.current }\n  }\n': ProjectsListQueryResult
+    '\n  *[_type == "filterCategory"] | order(orderRank asc){\n    _id,\n    title,\n    "slug": slug.current\n  }\n': FiltersQueryResult
+    '\n  *[_id == "about"][0]{\n    "bgColor": bgColor.rgb,\n    bioImage{..., "asset": asset->},\n    bioName,\n    bio,\n    availabilityStatus,\n    selectedClients,\n    exhibitions,\n    email,\n    cv{..., "asset": asset->},\n    instagramUrl\n  }\n': AboutQueryResult
+    '\n  *[_id == "settings"][0]{\n    defaultSeo,\n    "bgColor": bgColor.rgb\n  }\n': SettingsQueryResult
+  }
+}

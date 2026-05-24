@@ -42,14 +42,6 @@ export const project = defineType({
       group: 'content',
     }),
     defineField({
-      name: 'projectInfo',
-      title: 'Project info',
-      type: 'text',
-      rows: 3,
-      group: 'content',
-      description: 'Short metadata line (role, date, location, etc.).',
-    }),
-    defineField({
       name: 'projectDescription',
       title: 'Project description',
       type: 'array',
@@ -62,6 +54,26 @@ export const project = defineType({
       type: 'media',
       group: 'media',
       validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'mainHoverImage',
+      title: 'Main hover image',
+      type: 'image',
+      group: 'media',
+      description: 'Shown on hover over the project card. Max 5MB.',
+      options: {hotspot: true},
+      fields: [
+        defineField({name: 'alt', title: 'Alt text', type: 'string'}),
+      ],
+      validation: (rule) =>
+        rule.custom((value) => {
+          if (!value?.asset) return true
+          const size = (value.asset as unknown as {size?: number})?.size
+          if (typeof size === 'number' && size > 5 * 1024 * 1024) {
+            return `Image must be 5MB or smaller (got ${(size / 1024 / 1024).toFixed(2)}MB)`
+          }
+          return true
+        }),
     }),
     defineField({
       name: 'projectMedia',

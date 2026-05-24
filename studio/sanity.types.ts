@@ -60,7 +60,6 @@ export type Media = {
     media?: unknown
     _type: 'file'
   }
-  caption?: string
 }
 
 export type FilterCategory = {
@@ -71,7 +70,7 @@ export type FilterCategory = {
   _rev: string
   title: string
   slug: Slug
-  order?: number
+  orderRank?: string
 }
 
 export type Slug = {
@@ -97,7 +96,6 @@ export type Project = {
   slug: Slug
   projectNumber?: string
   clientName?: string
-  projectInfo?: string
   projectDescription?: Array<{
     children?: Array<{
       marks?: Array<string>
@@ -117,6 +115,14 @@ export type Project = {
     _key: string
   }>
   mainMedia: Media
+  mainHoverImage?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
   projectMedia?: Array<
     {
       _key: string
@@ -152,7 +158,17 @@ export type Settings = {
   _createdAt: string
   _updatedAt: string
   _rev: string
+  bgColor?: Color
   defaultSeo?: Seo
+}
+
+export type Color = {
+  _type: 'color'
+  hex?: string
+  alpha?: number
+  hsl?: HslaColor
+  hsv?: HsvaColor
+  rgb?: RgbaColor
 }
 
 export type About = {
@@ -161,6 +177,7 @@ export type About = {
   _createdAt: string
   _updatedAt: string
   _rev: string
+  bgColor?: Color
   bioImage?: {
     asset?: SanityImageAssetReference
     media?: unknown
@@ -188,7 +205,7 @@ export type About = {
     _type: 'block'
     _key: string
   }>
-  availabilityStatus?: 'available' | 'booked' | 'unavailable'
+  availabilityStatus?: string
   email?: string
   cv?: {
     asset?: SanityFileAssetReference
@@ -199,6 +216,30 @@ export type About = {
   selectedClients?: Array<string>
   exhibitions?: Array<string>
   seo?: Seo
+}
+
+export type RgbaColor = {
+  _type: 'rgbaColor'
+  r?: number
+  g?: number
+  b?: number
+  a?: number
+}
+
+export type HsvaColor = {
+  _type: 'hsvaColor'
+  h?: number
+  s?: number
+  v?: number
+  a?: number
+}
+
+export type HslaColor = {
+  _type: 'hslaColor'
+  h?: number
+  s?: number
+  l?: number
+  a?: number
 }
 
 export type SanityImagePaletteSwatch = {
@@ -310,7 +351,11 @@ export type AllSanitySchemaTypes =
   | SanityImageCrop
   | SanityImageHotspot
   | Settings
+  | Color
   | About
+  | RgbaColor
+  | HsvaColor
+  | HslaColor
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
