@@ -24,12 +24,12 @@ export function ProjectIndex({projects}: {projects: ProjectsListQueryResult}) {
             >
               <Link
                 href={`/projects/${project.slug}`}
-                className="flex h-full w-full items-center justify-start px-4 font-sans text-[10px] uppercase"
+                className="flex h-full w-full items-center justify-center px-4 font-sans text-[10px] uppercase mix-blend-difference text-white"
               >
                 {project.clientName}
               </Link>
               {hoverUrl && (
-                <div className="index-bg pointer-events-none fixed inset-0 z-[-1] flex items-center justify-center opacity-0 transition-opacity duration-200">
+                <div className="index-bg pointer-events-none fixed inset-0 -z-10 flex items-center justify-center opacity-0 transition-opacity duration-200">
                   <Image
                     src={hoverUrl}
                     alt=""

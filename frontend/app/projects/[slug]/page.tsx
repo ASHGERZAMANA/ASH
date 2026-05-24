@@ -1,9 +1,9 @@
 import type {Metadata} from 'next'
-import Image from 'next/image'
 import Link from 'next/link'
 import {notFound} from 'next/navigation'
 import {PortableText} from 'next-sanity'
 
+import {MediaWithDock} from '@/app/components/projects/MediaWithDock'
 import {client} from '@/sanity/lib/client'
 import {urlForImage} from '@/sanity/lib/image'
 import {sanityFetch} from '@/sanity/lib/live'
@@ -52,39 +52,6 @@ export async function generateMetadata({params}: {params: Params}): Promise<Meta
   }
 }
 
-function ProjectMedia({
-  media,
-}: {
-  media: NonNullable<
-    NonNullable<Awaited<ReturnType<typeof sanityFetch<typeof projectBySlugQuery>>>['data']>['mainMedia']
-  >
-}) {
-  if (media.type === 'video' && media.video?.asset?.url) {
-    return (
-      <video
-        src={media.video.asset.url}
-        controls
-        playsInline
-        className="max-h-full max-w-full object-contain"
-      />
-    )
-  }
-  if (media.type === 'image' && media.image?.asset) {
-    const url = urlForImage(media.image)?.width(1600).url()
-    if (!url) return null
-    return (
-      <Image
-        src={url}
-        alt={media.image.alt || ''}
-        fill
-        sizes="815px"
-        className="object-contain"
-      />
-    )
-  }
-  return null
-}
-
 export default async function ProjectPage({params}: {params: Params}) {
   const {slug} = await params
   const [{data: project}, {data: adjacent}] = await Promise.all([
@@ -103,9 +70,12 @@ export default async function ProjectPage({params}: {params: Params}) {
     <article className="flex flex-col gap-8 pt-37">
       {/* TOP CONTAINER — image (left) + prev/next + description (right, bottom-aligned) */}
       <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-        <div className="relative flex aspect-square w-full items-center justify-center md:size-260 md:shrink-0">
-          {project.mainMedia && <ProjectMedia media={project.mainMedia} />}
-        </div>
+        {project.mainMedia && (
+          <MediaWithDock
+            mainMedia={project.mainMedia}
+            projectMedia={project.projectMedia ?? []}
+          />
+        )}
 
         <div className="flex flex-col gap-6 md:w-160 md:shrink-0">
           <nav className="flex items-center justify-between uppercase">
@@ -129,8 +99,8 @@ export default async function ProjectPage({params}: {params: Params}) {
         </div>
       </div>
 
-      {/* BOTTOM CONTAINER — client + project title */}
-      <div className="flex flex-wrap items-baseline gap-x-12 gap-y-2 font-sans text-5xl md:text-7xl">
+      {/* BOTTOM CONTAINER — client + project title, width matches image above */}
+      <div className="flex flex-wrap items-baseline gap-x-12 gap-y-2 font-sans text-5xl md:w-260 md:justify-between md:text-[3.6rem]">
         {project.clientName && <span>{project.clientName}</span>}
         {project.projectName && <span className="opacity-40">{project.projectName}</span>}
       </div>
