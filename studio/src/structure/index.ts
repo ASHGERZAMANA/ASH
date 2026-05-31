@@ -8,10 +8,13 @@ export const structure: StructureResolver = (S, context) =>
   S.list()
     .title('Content')
     .items([
-      S.listItem()
-        .title('Projects')
-        .icon(ProjectsIcon)
-        .child(S.documentTypeList('project').title('Projects')),
+      orderableDocumentListDeskItem({
+        type: 'project',
+        title: 'Projects',
+        icon: ProjectsIcon,
+        S,
+        context,
+      }),
       orderableDocumentListDeskItem({
         type: 'filterCategory',
         title: 'Filters',

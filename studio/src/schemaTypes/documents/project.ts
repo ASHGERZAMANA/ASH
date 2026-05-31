@@ -1,11 +1,13 @@
 import {defineField, defineType} from 'sanity'
 import {ProjectsIcon} from '@sanity/icons'
+import {orderRankField, orderRankOrdering} from '@sanity/orderable-document-list'
 
 export const project = defineType({
   name: 'project',
   title: 'Project',
   type: 'document',
   icon: ProjectsIcon,
+  orderings: [orderRankOrdering],
   groups: [
     {name: 'content', title: 'Content', default: true},
     {name: 'media', title: 'Media'},
@@ -42,18 +44,32 @@ export const project = defineType({
       group: 'content',
     }),
     defineField({
-      name: 'projectDescription',
-      title: 'Project description',
+      name: 'projectOverview',
+      title: 'Project overview',
       type: 'array',
       group: 'content',
       of: [{type: 'block'}],
     }),
     defineField({
-      name: 'mainMedia',
-      title: 'Main media',
-      type: 'media',
-      group: 'media',
-      validation: (rule) => rule.required(),
+      name: 'info',
+      title: 'Info',
+      type: 'array',
+      group: 'content',
+      of: [{type: 'block'}],
+    }),
+    defineField({
+      name: 'scope',
+      title: 'Scope',
+      type: 'array',
+      group: 'content',
+      of: [{type: 'block'}],
+    }),
+    defineField({
+      name: 'credits',
+      title: 'Credits',
+      type: 'array',
+      group: 'content',
+      of: [{type: 'block'}],
     }),
     defineField({
       name: 'mainHoverImage',
@@ -80,7 +96,9 @@ export const project = defineType({
       title: 'Project media',
       type: 'array',
       group: 'media',
+      description: 'First item is used as the main image on the homepage and project page.',
       of: [{type: 'media'}],
+      validation: (rule) => rule.required().min(1),
     }),
     defineField({
       name: 'filters',
@@ -95,13 +113,14 @@ export const project = defineType({
       type: 'seo',
       group: 'seo',
     }),
+    orderRankField({type: 'project'}),
   ],
   preview: {
     select: {
       title: 'projectName',
       subtitle: 'clientName',
-      type: 'mainMedia.type',
-      image: 'mainMedia.image',
+      type: 'projectMedia.0.type',
+      image: 'projectMedia.0.image',
     },
     prepare({title, subtitle, type, image}) {
       return {

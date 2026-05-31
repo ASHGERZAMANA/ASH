@@ -67,6 +67,13 @@ export const media = defineType({
           return true
         }),
     }),
+    defineField({
+      name: 'imageInfo',
+      title: 'Image info',
+      type: 'array',
+      of: [{type: 'block'}],
+      validation: (rule) => rule.required().min(1).error('Image info is required'),
+    }),
   ],
   preview: {
     select: {

@@ -6,7 +6,7 @@ export const projectSlugsQuery = defineQuery(`
 
 export const adjacentProjectsQuery = defineQuery(`
   {
-    "all": *[_type == "project" && defined(slug.current)] | order(coalesce(projectNumber, projectName) asc){
+    "all": *[_type == "project" && defined(slug.current)] | order(orderRank asc){
       "slug": slug.current,
       projectName,
       clientName
@@ -22,17 +22,16 @@ export const projectBySlugQuery = defineQuery(`
     projectNumber,
     clientName,
     projectInfo,
-    projectDescription,
-    mainMedia{
-      type,
-      "image": image{..., "asset": asset->},
-      "video": video{..., "asset": asset->}
-    },
+    projectOverview,
+    info,
+    scope,
+    credits,
     mainHoverImage{..., "asset": asset->},
     projectMedia[]{
       type,
       "image": image{..., "asset": asset->},
-      "video": video{..., "asset": asset->}
+      "video": video{..., "asset": asset->},
+      imageInfo
     },
     filters[]->{ _id, title, "slug": slug.current },
     seo
@@ -44,12 +43,12 @@ export const projectsListQuery = defineQuery(`
     _type == "project"
     && defined(slug.current)
     && (count($filters) == 0 || count(filters[@->slug.current in $filters]) > 0)
-  ] | order(coalesce(projectNumber, projectName) asc){
+  ] | order(orderRank asc){
     _id,
     projectName,
     "slug": slug.current,
     clientName,
-    mainMedia{
+    "mainMedia": projectMedia[0]{
       type,
       "image": image{..., "asset": asset->},
       "video": video{..., "asset": asset->}

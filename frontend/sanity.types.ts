@@ -60,6 +60,24 @@ export type Media = {
     media?: unknown
     _type: 'file'
   }
+  imageInfo: Array<{
+    children?: Array<{
+      marks?: Array<string>
+      text?: string
+      _type: 'span'
+      _key: string
+    }>
+    style?: 'normal' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote'
+    listItem?: 'bullet' | 'number'
+    markDefs?: Array<{
+      href?: string
+      _type: 'link'
+      _key: string
+    }>
+    level?: number
+    _type: 'block'
+    _key: string
+  }>
 }
 
 export type FilterCategory = {
@@ -96,7 +114,7 @@ export type Project = {
   slug: Slug
   projectNumber?: string
   clientName?: string
-  projectDescription?: Array<{
+  projectOverview?: Array<{
     children?: Array<{
       marks?: Array<string>
       text?: string
@@ -114,7 +132,60 @@ export type Project = {
     _type: 'block'
     _key: string
   }>
-  mainMedia: Media
+  info?: Array<{
+    children?: Array<{
+      marks?: Array<string>
+      text?: string
+      _type: 'span'
+      _key: string
+    }>
+    style?: 'normal' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote'
+    listItem?: 'bullet' | 'number'
+    markDefs?: Array<{
+      href?: string
+      _type: 'link'
+      _key: string
+    }>
+    level?: number
+    _type: 'block'
+    _key: string
+  }>
+  scope?: Array<{
+    children?: Array<{
+      marks?: Array<string>
+      text?: string
+      _type: 'span'
+      _key: string
+    }>
+    style?: 'normal' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote'
+    listItem?: 'bullet' | 'number'
+    markDefs?: Array<{
+      href?: string
+      _type: 'link'
+      _key: string
+    }>
+    level?: number
+    _type: 'block'
+    _key: string
+  }>
+  credits?: Array<{
+    children?: Array<{
+      marks?: Array<string>
+      text?: string
+      _type: 'span'
+      _key: string
+    }>
+    style?: 'normal' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote'
+    listItem?: 'bullet' | 'number'
+    markDefs?: Array<{
+      href?: string
+      _type: 'link'
+      _key: string
+    }>
+    level?: number
+    _type: 'block'
+    _key: string
+  }>
   mainHoverImage?: {
     asset?: SanityImageAssetReference
     media?: unknown
@@ -123,7 +194,7 @@ export type Project = {
     alt?: string
     _type: 'image'
   }
-  projectMedia?: Array<
+  projectMedia: Array<
     {
       _key: string
     } & Media
@@ -134,6 +205,7 @@ export type Project = {
     } & FilterCategoryReference
   >
   seo?: Seo
+  orderRank?: string
 }
 
 export type SanityImageCrop = {
@@ -374,7 +446,7 @@ export type ProjectSlugsQueryResult = Array<{
 
 // Source: sanity/lib/queries.ts
 // Variable: adjacentProjectsQuery
-// Query: {    "all": *[_type == "project" && defined(slug.current)] | order(coalesce(projectNumber, projectName) asc){      "slug": slug.current,      projectName,      clientName    }  }
+// Query: {    "all": *[_type == "project" && defined(slug.current)] | order(orderRank asc){      "slug": slug.current,      projectName,      clientName    }  }
 export type AdjacentProjectsQueryResult = {
   all: Array<{
     slug: string
@@ -385,7 +457,7 @@ export type AdjacentProjectsQueryResult = {
 
 // Source: sanity/lib/queries.ts
 // Variable: projectBySlugQuery
-// Query: *[_type == "project" && slug.current == $slug][0]{    _id,    projectName,    "slug": slug.current,    projectNumber,    clientName,    projectInfo,    projectDescription,    mainMedia{      type,      "image": image{..., "asset": asset->},      "video": video{..., "asset": asset->}    },    mainHoverImage{..., "asset": asset->},    projectMedia[]{      type,      "image": image{..., "asset": asset->},      "video": video{..., "asset": asset->}    },    filters[]->{ _id, title, "slug": slug.current },    seo  }
+// Query: *[_type == "project" && slug.current == $slug][0]{    _id,    projectName,    "slug": slug.current,    projectNumber,    clientName,    projectInfo,    projectOverview,    info,    scope,    credits,    mainHoverImage{..., "asset": asset->},    projectMedia[]{      type,      "image": image{..., "asset": asset->},      "video": video{..., "asset": asset->},      imageInfo    },    filters[]->{ _id, title, "slug": slug.current },    seo  }
 export type ProjectBySlugQueryResult = {
   _id: string
   projectName: string
@@ -393,7 +465,7 @@ export type ProjectBySlugQueryResult = {
   projectNumber: string | null
   clientName: string | null
   projectInfo: null
-  projectDescription: Array<{
+  projectOverview: Array<{
     children?: Array<{
       marks?: Array<string>
       text?: string
@@ -411,63 +483,60 @@ export type ProjectBySlugQueryResult = {
     _type: 'block'
     _key: string
   }> | null
-  mainMedia: {
-    type: 'image' | 'video'
-    image: {
-      asset: {
-        _id: string
-        _type: 'sanity.imageAsset'
-        _createdAt: string
-        _updatedAt: string
-        _rev: string
-        originalFilename?: string
-        label?: string
-        title?: string
-        description?: string
-        altText?: string
-        sha1hash: string
-        extension: string
-        mimeType: string
-        size: number
-        assetId: string
-        uploadId?: string
-        path: string
-        url: string
-        metadata?: SanityImageMetadata
-        source?: SanityAssetSourceData
-      } | null
-      media?: unknown
-      hotspot?: SanityImageHotspot
-      crop?: SanityImageCrop
-      alt?: string
-      _type: 'image'
-    } | null
-    video: {
-      asset: {
-        _id: string
-        _type: 'sanity.fileAsset'
-        _createdAt: string
-        _updatedAt: string
-        _rev: string
-        originalFilename?: string
-        label?: string
-        title?: string
-        description?: string
-        altText?: string
-        sha1hash: string
-        extension: string
-        mimeType: string
-        size: number
-        assetId: string
-        uploadId?: string
-        path: string
-        url: string
-        source?: SanityAssetSourceData
-      } | null
-      media?: unknown
-      _type: 'file'
-    } | null
-  }
+  info: Array<{
+    children?: Array<{
+      marks?: Array<string>
+      text?: string
+      _type: 'span'
+      _key: string
+    }>
+    style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
+    listItem?: 'bullet' | 'number'
+    markDefs?: Array<{
+      href?: string
+      _type: 'link'
+      _key: string
+    }>
+    level?: number
+    _type: 'block'
+    _key: string
+  }> | null
+  scope: Array<{
+    children?: Array<{
+      marks?: Array<string>
+      text?: string
+      _type: 'span'
+      _key: string
+    }>
+    style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
+    listItem?: 'bullet' | 'number'
+    markDefs?: Array<{
+      href?: string
+      _type: 'link'
+      _key: string
+    }>
+    level?: number
+    _type: 'block'
+    _key: string
+  }> | null
+  credits: Array<{
+    children?: Array<{
+      marks?: Array<string>
+      text?: string
+      _type: 'span'
+      _key: string
+    }>
+    style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
+    listItem?: 'bullet' | 'number'
+    markDefs?: Array<{
+      href?: string
+      _type: 'link'
+      _key: string
+    }>
+    level?: number
+    _type: 'block'
+    _key: string
+  }> | null
   mainHoverImage: {
     asset: {
       _id: string
@@ -553,7 +622,25 @@ export type ProjectBySlugQueryResult = {
       media?: unknown
       _type: 'file'
     } | null
-  }> | null
+    imageInfo: Array<{
+      children?: Array<{
+        marks?: Array<string>
+        text?: string
+        _type: 'span'
+        _key: string
+      }>
+      style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
+      listItem?: 'bullet' | 'number'
+      markDefs?: Array<{
+        href?: string
+        _type: 'link'
+        _key: string
+      }>
+      level?: number
+      _type: 'block'
+      _key: string
+    }>
+  }>
   filters: Array<{
     _id: string
     title: string
@@ -564,7 +651,7 @@ export type ProjectBySlugQueryResult = {
 
 // Source: sanity/lib/queries.ts
 // Variable: projectsListQuery
-// Query: *[    _type == "project"    && defined(slug.current)    && (count($filters) == 0 || count(filters[@->slug.current in $filters]) > 0)  ] | order(coalesce(projectNumber, projectName) asc){    _id,    projectName,    "slug": slug.current,    clientName,    mainMedia{      type,      "image": image{..., "asset": asset->},      "video": video{..., "asset": asset->}    },    mainHoverImage{..., "asset": asset->},    filters[]->{ "slug": slug.current }  }
+// Query: *[    _type == "project"    && defined(slug.current)    && (count($filters) == 0 || count(filters[@->slug.current in $filters]) > 0)  ] | order(orderRank asc){    _id,    projectName,    "slug": slug.current,    clientName,    "mainMedia": projectMedia[0]{      type,      "image": image{..., "asset": asset->},      "video": video{..., "asset": asset->}    },    mainHoverImage{..., "asset": asset->},    filters[]->{ "slug": slug.current }  }
 export type ProjectsListQueryResult = Array<{
   _id: string
   projectName: string
@@ -626,7 +713,7 @@ export type ProjectsListQueryResult = Array<{
       media?: unknown
       _type: 'file'
     } | null
-  }
+  } | null
   mainHoverImage: {
     asset: {
       _id: string
@@ -804,9 +891,9 @@ import '@sanity/client'
 declare module '@sanity/client' {
   interface SanityQueries {
     '\n  *[_type == "project" && defined(slug.current)]{ "slug": slug.current }\n': ProjectSlugsQueryResult
-    '\n  {\n    "all": *[_type == "project" && defined(slug.current)] | order(coalesce(projectNumber, projectName) asc){\n      "slug": slug.current,\n      projectName,\n      clientName\n    }\n  }\n': AdjacentProjectsQueryResult
-    '\n  *[_type == "project" && slug.current == $slug][0]{\n    _id,\n    projectName,\n    "slug": slug.current,\n    projectNumber,\n    clientName,\n    projectInfo,\n    projectDescription,\n    mainMedia{\n      type,\n      "image": image{..., "asset": asset->},\n      "video": video{..., "asset": asset->}\n    },\n    mainHoverImage{..., "asset": asset->},\n    projectMedia[]{\n      type,\n      "image": image{..., "asset": asset->},\n      "video": video{..., "asset": asset->}\n    },\n    filters[]->{ _id, title, "slug": slug.current },\n    seo\n  }\n': ProjectBySlugQueryResult
-    '\n  *[\n    _type == "project"\n    && defined(slug.current)\n    && (count($filters) == 0 || count(filters[@->slug.current in $filters]) > 0)\n  ] | order(coalesce(projectNumber, projectName) asc){\n    _id,\n    projectName,\n    "slug": slug.current,\n    clientName,\n    mainMedia{\n      type,\n      "image": image{..., "asset": asset->},\n      "video": video{..., "asset": asset->}\n    },\n    mainHoverImage{..., "asset": asset->},\n    filters[]->{ "slug": slug.current }\n  }\n': ProjectsListQueryResult
+    '\n  {\n    "all": *[_type == "project" && defined(slug.current)] | order(orderRank asc){\n      "slug": slug.current,\n      projectName,\n      clientName\n    }\n  }\n': AdjacentProjectsQueryResult
+    '\n  *[_type == "project" && slug.current == $slug][0]{\n    _id,\n    projectName,\n    "slug": slug.current,\n    projectNumber,\n    clientName,\n    projectInfo,\n    projectOverview,\n    info,\n    scope,\n    credits,\n    mainHoverImage{..., "asset": asset->},\n    projectMedia[]{\n      type,\n      "image": image{..., "asset": asset->},\n      "video": video{..., "asset": asset->},\n      imageInfo\n    },\n    filters[]->{ _id, title, "slug": slug.current },\n    seo\n  }\n': ProjectBySlugQueryResult
+    '\n  *[\n    _type == "project"\n    && defined(slug.current)\n    && (count($filters) == 0 || count(filters[@->slug.current in $filters]) > 0)\n  ] | order(orderRank asc){\n    _id,\n    projectName,\n    "slug": slug.current,\n    clientName,\n    "mainMedia": projectMedia[0]{\n      type,\n      "image": image{..., "asset": asset->},\n      "video": video{..., "asset": asset->}\n    },\n    mainHoverImage{..., "asset": asset->},\n    filters[]->{ "slug": slug.current }\n  }\n': ProjectsListQueryResult
     '\n  *[_type == "filterCategory"] | order(orderRank asc){\n    _id,\n    title,\n    "slug": slug.current\n  }\n': FiltersQueryResult
     '\n  *[_id == "about"][0]{\n    "bgColor": bgColor.rgb,\n    bioImage{..., "asset": asset->},\n    bioName,\n    bio,\n    availabilityStatus,\n    selectedClients,\n    exhibitions,\n    email,\n    cv{..., "asset": asset->},\n    instagramUrl\n  }\n': AboutQueryResult
     '\n  *[_id == "settings"][0]{\n    defaultSeo,\n    "bgColor": bgColor.rgb\n  }\n': SettingsQueryResult

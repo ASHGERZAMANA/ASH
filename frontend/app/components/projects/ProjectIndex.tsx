@@ -12,7 +12,7 @@ export function ProjectIndex({projects}: {projects: ProjectsListQueryResult}) {
   return (
     <div className="index-view relative">
       <ul className="grid grid-cols-2 gap-px sm:grid-cols-3 lg:grid-cols-4">
-        {projects.map((project, i) => {
+        {projects.map((project) => {
           const hoverUrl = project.mainHoverImage
             ? urlForImage(project.mainHoverImage)?.width(1600).url()
             : undefined
@@ -24,7 +24,7 @@ export function ProjectIndex({projects}: {projects: ProjectsListQueryResult}) {
             >
               <Link
                 href={`/projects/${project.slug}`}
-                className="flex h-full w-full items-center justify-center px-4 font-sans text-[10px] uppercase mix-blend-difference text-white"
+                className="flex h-full w-full items-center justify-center px-4 text-[10px] uppercase mix-blend-difference text-white"
               >
                 {project.clientName}
               </Link>

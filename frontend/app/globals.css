@@ -1,7 +1,6 @@
 @import 'tailwindcss';
 
 @theme {
-  --font-sans: var(--font-quadrant), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-quadrant-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
   --text-base: 10px;
   --text-base--line-height: 1.4;
@@ -9,5 +8,10 @@
 
 html {
   font-size: 10px;
+}
+
+body:has(.is-not-found) header,
+body:has(.is-not-found) header a {
+  color: #ffffff;
 }
 

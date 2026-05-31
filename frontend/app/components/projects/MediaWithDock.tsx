@@ -1,12 +1,33 @@
 'use client'
 
 import Image from 'next/image'
-import {useEffect, useRef, useState} from 'react'
+import {PortableText} from 'next-sanity'
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from 'react'
 
 import {urlForImage} from '@/sanity/lib/image'
 import type {ProjectBySlugQueryResult} from '@/sanity.types'
 
-type Media = NonNullable<NonNullable<ProjectBySlugQueryResult>['mainMedia']>
+type Media = NonNullable<NonNullable<ProjectBySlugQueryResult>['projectMedia']>[number]
+
+type Ctx = {
+  activeIndex: number
+  media: Media[]
+  setActiveIndex: (i: number | ((prev: number) => number)) => void
+}
+const ActiveMediaContext = createContext<Ctx | null>(null)
+
+function useActiveMedia() {
+  const ctx = useContext(ActiveMediaContext)
+  if (!ctx) throw new Error('useActiveMedia must be used inside <MediaProvider>')
+  return ctx
+}
 
 function MediaDisplay({media}: {media: Media}) {
   if (media.type === 'video' && media.video?.asset?.url) {
@@ -62,26 +83,16 @@ function ThumbnailPreview({media}: {media: Media}) {
   return null
 }
 
-export function MediaWithDock({
-  mainMedia,
+export function MediaProvider({
   projectMedia,
+  children,
 }: {
-  mainMedia: Media
   projectMedia: Media[]
+  children: ReactNode
 }) {
-  const allMedia: Media[] = [mainMedia, ...projectMedia]
   const [activeIndex, setActiveIndex] = useState(0)
   const [isDockOpen, setIsDockOpen] = useState(false)
-  const [cursor, setCursor] = useState<{x: number; y: number; visible: boolean}>({
-    x: 0,
-    y: 0,
-    visible: false,
-  })
-  const mediaRef = useRef<HTMLDivElement>(null)
-
-  const active = allMedia[activeIndex] ?? mainMedia
-  const showDock = projectMedia.length > 0
-  const totalMedia = allMedia.length
+  const showDock = projectMedia.length > 1
 
   useEffect(() => {
     if (!showDock) return
@@ -93,41 +104,15 @@ export function MediaWithDock({
   }, [isDockOpen, showDock])
 
   return (
-    <>
-      <div
-        ref={mediaRef}
-        onClick={() => setActiveIndex((i) => (i + 1) % totalMedia)}
-        onMouseEnter={(e) => setCursor({x: e.clientX, y: e.clientY, visible: true})}
-        onMouseMove={(e) => setCursor({x: e.clientX, y: e.clientY, visible: true})}
-        onMouseLeave={() => setCursor((c) => ({...c, visible: false}))}
-        className="relative flex aspect-square w-full cursor-none items-center justify-center md:size-260 md:shrink-0"
-      >
-        <MediaDisplay media={active} />
-      </div>
-
-      {/* Custom cursor */}
-      {cursor.visible && (
-        <div
-          className="pointer-events-none fixed z-50 font-sans text-white uppercase mix-blend-difference"
-          style={{
-            left: cursor.x,
-            top: cursor.y,
-            transform: 'translate(12px, 12px)',
-          }}
-        >
-          [ {activeIndex + 1}/{totalMedia} ]
-        </div>
-      )}
+    <ActiveMediaContext.Provider value={{activeIndex, media: projectMedia, setActiveIndex}}>
+      {children}
 
       {showDock && (
         <>
-          {/* Hot zone */}
           <div
             className="fixed inset-x-0 bottom-0 z-30 h-2.5"
             onMouseEnter={() => setIsDockOpen(true)}
           />
-
-          {/* Dock */}
           <div
             onMouseEnter={() => setIsDockOpen(true)}
             onMouseLeave={() => setIsDockOpen(false)}
@@ -135,7 +120,7 @@ export function MediaWithDock({
               isDockOpen ? 'translate-y-0' : 'translate-y-full'
             }`}
           >
-            {allMedia.map((media, i) => (
+            {projectMedia.map((media, i) => (
               <button
                 key={i}
                 type="button"
@@ -149,6 +134,61 @@ export function MediaWithDock({
           </div>
         </>
       )}
+    </ActiveMediaContext.Provider>
+  )
+}
+
+export function ActiveMedia() {
+  const {activeIndex, media, setActiveIndex} = useActiveMedia()
+  const [cursor, setCursor] = useState<{x: number; y: number; visible: boolean}>({
+    x: 0,
+    y: 0,
+    visible: false,
+  })
+  const ref = useRef<HTMLDivElement>(null)
+  const active = media[activeIndex] ?? media[0]
+  const total = media.length
+
+  return (
+    <>
+      <div
+        ref={ref}
+        onClick={() => setActiveIndex((i) => (i + 1) % total)}
+        onMouseEnter={(e) => setCursor({x: e.clientX, y: e.clientY, visible: true})}
+        onMouseMove={(e) => setCursor({x: e.clientX, y: e.clientY, visible: true})}
+        onMouseLeave={() => setCursor((c) => ({...c, visible: false}))}
+        className="relative flex aspect-square w-full cursor-none items-center justify-center md:size-260 md:shrink-0"
+      >
+        {active && <MediaDisplay media={active} />}
+      </div>
+
+      {cursor.visible && (
+        <div
+          className="pointer-events-none fixed z-50 text-white uppercase mix-blend-difference"
+          style={{
+            left: cursor.x,
+            top: cursor.y,
+            transform: 'translate(12px, 12px)',
+          }}
+        >
+          [ {activeIndex + 1}/{total} ]
+        </div>
+      )}
     </>
+  )
+}
+
+export function ActiveImageInfo() {
+  const {activeIndex, media} = useActiveMedia()
+  const active = media[activeIndex]
+  if (!active?.imageInfo || active.imageInfo.length === 0) return null
+
+  return (
+    <section>
+      <h3 className="uppercase">Image info</h3>
+      <div className="[&_p]:my-0">
+        <PortableText value={active.imageInfo} />
+      </div>
+    </section>
   )
 }

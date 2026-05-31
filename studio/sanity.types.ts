@@ -60,6 +60,24 @@ export type Media = {
     media?: unknown
     _type: 'file'
   }
+  imageInfo: Array<{
+    children?: Array<{
+      marks?: Array<string>
+      text?: string
+      _type: 'span'
+      _key: string
+    }>
+    style?: 'normal' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote'
+    listItem?: 'bullet' | 'number'
+    markDefs?: Array<{
+      href?: string
+      _type: 'link'
+      _key: string
+    }>
+    level?: number
+    _type: 'block'
+    _key: string
+  }>
 }
 
 export type FilterCategory = {
@@ -96,7 +114,7 @@ export type Project = {
   slug: Slug
   projectNumber?: string
   clientName?: string
-  projectDescription?: Array<{
+  projectOverview?: Array<{
     children?: Array<{
       marks?: Array<string>
       text?: string
@@ -114,7 +132,60 @@ export type Project = {
     _type: 'block'
     _key: string
   }>
-  mainMedia: Media
+  info?: Array<{
+    children?: Array<{
+      marks?: Array<string>
+      text?: string
+      _type: 'span'
+      _key: string
+    }>
+    style?: 'normal' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote'
+    listItem?: 'bullet' | 'number'
+    markDefs?: Array<{
+      href?: string
+      _type: 'link'
+      _key: string
+    }>
+    level?: number
+    _type: 'block'
+    _key: string
+  }>
+  scope?: Array<{
+    children?: Array<{
+      marks?: Array<string>
+      text?: string
+      _type: 'span'
+      _key: string
+    }>
+    style?: 'normal' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote'
+    listItem?: 'bullet' | 'number'
+    markDefs?: Array<{
+      href?: string
+      _type: 'link'
+      _key: string
+    }>
+    level?: number
+    _type: 'block'
+    _key: string
+  }>
+  credits?: Array<{
+    children?: Array<{
+      marks?: Array<string>
+      text?: string
+      _type: 'span'
+      _key: string
+    }>
+    style?: 'normal' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote'
+    listItem?: 'bullet' | 'number'
+    markDefs?: Array<{
+      href?: string
+      _type: 'link'
+      _key: string
+    }>
+    level?: number
+    _type: 'block'
+    _key: string
+  }>
   mainHoverImage?: {
     asset?: SanityImageAssetReference
     media?: unknown
@@ -123,7 +194,7 @@ export type Project = {
     alt?: string
     _type: 'image'
   }
-  projectMedia?: Array<
+  projectMedia: Array<
     {
       _key: string
     } & Media
@@ -134,6 +205,7 @@ export type Project = {
     } & FilterCategoryReference
   >
   seo?: Seo
+  orderRank?: string
 }
 
 export type SanityImageCrop = {

@@ -13,13 +13,6 @@ import {rgbToCss} from '@/sanity/lib/color'
 import {sanityFetch, SanityLive} from '@/sanity/lib/live'
 import {settingsQuery} from '@/sanity/lib/queries'
 
-const quadrant = localFont({
-  src: './fonts/QuadrantText-201218-Medium.woff2',
-  variable: '--font-quadrant',
-  display: 'swap',
-  weight: '500',
-})
-
 const quadrantMono = localFont({
   src: './fonts/QuadrantTextMono-Regular.woff2',
   variable: '--font-quadrant-mono',
@@ -40,7 +33,7 @@ export default async function RootLayout({children}: {children: React.ReactNode}
   const bgColor = rgbToCss(settings?.bgColor)
 
   return (
-    <html lang="en" className={`${quadrant.variable} ${quadrantMono.variable}`}>
+    <html lang="en" className={quadrantMono.variable}>
       <body className="font-mono" style={bgColor ? {backgroundColor: bgColor} : undefined}>
         {isDraftMode && <VisualEditing />}
         <SanityLive />
