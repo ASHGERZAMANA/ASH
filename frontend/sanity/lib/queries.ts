@@ -48,7 +48,7 @@ export const projectsListQuery = defineQuery(`
     projectName,
     "slug": slug.current,
     clientName,
-    "mainMedia": projectMedia[0]{
+    mainMedia{
       type,
       "image": image{..., "asset": asset->},
       "video": video{..., "asset": asset->}

@@ -72,7 +72,12 @@ export const media = defineType({
       title: 'Image info',
       type: 'array',
       of: [{type: 'block'}],
-      validation: (rule) => rule.required().min(1).error('Image info is required'),
+      description: 'Shown on the project page next to this image.',
+      hidden: ({parent}) => {
+        // Hide when this media is the project's mainMedia (not inside the projectMedia array).
+        // Array items have a `_key`; the mainMedia object does not.
+        return !parent || !('_key' in (parent as object))
+      },
     }),
   ],
   preview: {

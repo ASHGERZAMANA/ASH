@@ -12,7 +12,11 @@ export async function AboutContent() {
   const {data: about} = await sanityFetch({query: aboutQuery})
   if (!about) return null
 
-  const bioUrl = about.bioImage ? urlForImage(about.bioImage)?.width(400).url() : undefined
+  const bioDims = about.bioImage?.asset?.metadata?.dimensions
+  const bioUrl =
+    about.bioImage && bioDims
+      ? urlForImage(about.bioImage)?.width(bioDims.width).url()
+      : undefined
   const cvUrl = about.cv?.asset?.url
   const bgColor = rgbToCss(about.bgColor)
 
@@ -22,17 +26,22 @@ export async function AboutContent() {
       style={bgColor ? {backgroundColor: bgColor} : undefined}
     >
       <div className="grid grid-cols-1 items-start gap-x-8 gap-y-3 md:grid-cols-5 md:grid-rows-[auto_auto]">
-        {/* Row 1, Col 1 — Portrait (spans bio+pill rows) */}
-        <div className="md:row-span-2 md:self-stretch">
-          {bioUrl && (
+        {/* Row 1, Col 1 — Portrait, rendered at intrinsic dimensions */}
+        <div className="md:row-span-2">
+          {bioUrl && bioDims && (
             <Image
               src={bioUrl}
               alt={about.bioImage?.alt || about.bioName || ''}
-              width={400}
-              height={500}
-              sizes="200px"
+              width={bioDims.width}
+              height={bioDims.height}
+              sizes={`${bioDims.width}px`}
               className="border border-black/30"
-              style={{height: '100%', width: 'auto'}}
+              style={{
+                width: `${bioDims.width}px`,
+                height: `${bioDims.height}px`,
+                maxWidth: 'none',
+              }}
+              unoptimized
             />
           )}
         </div>

@@ -442,7 +442,7 @@
               }
             }
           },
-          "optional": false
+          "optional": true
         }
       }
     }
@@ -1345,6 +1345,14 @@
           }
         },
         "optional": true
+      },
+      "mainMedia": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "media"
+        },
+        "optional": false
       },
       "mainHoverImage": {
         "type": "objectAttribute",

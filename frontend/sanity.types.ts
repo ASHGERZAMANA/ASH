@@ -60,7 +60,7 @@ export type Media = {
     media?: unknown
     _type: 'file'
   }
-  imageInfo: Array<{
+  imageInfo?: Array<{
     children?: Array<{
       marks?: Array<string>
       text?: string
@@ -186,6 +186,7 @@ export type Project = {
     _type: 'block'
     _key: string
   }>
+  mainMedia: Media
   mainHoverImage?: {
     asset?: SanityImageAssetReference
     media?: unknown
@@ -639,7 +640,7 @@ export type ProjectBySlugQueryResult = {
       level?: number
       _type: 'block'
       _key: string
-    }>
+    }> | null
   }>
   filters: Array<{
     _id: string
@@ -651,7 +652,7 @@ export type ProjectBySlugQueryResult = {
 
 // Source: sanity/lib/queries.ts
 // Variable: projectsListQuery
-// Query: *[    _type == "project"    && defined(slug.current)    && (count($filters) == 0 || count(filters[@->slug.current in $filters]) > 0)  ] | order(orderRank asc){    _id,    projectName,    "slug": slug.current,    clientName,    "mainMedia": projectMedia[0]{      type,      "image": image{..., "asset": asset->},      "video": video{..., "asset": asset->}    },    mainHoverImage{..., "asset": asset->},    filters[]->{ "slug": slug.current }  }
+// Query: *[    _type == "project"    && defined(slug.current)    && (count($filters) == 0 || count(filters[@->slug.current in $filters]) > 0)  ] | order(orderRank asc){    _id,    projectName,    "slug": slug.current,    clientName,    mainMedia{      type,      "image": image{..., "asset": asset->},      "video": video{..., "asset": asset->}    },    mainHoverImage{..., "asset": asset->},    filters[]->{ "slug": slug.current }  }
 export type ProjectsListQueryResult = Array<{
   _id: string
   projectName: string
@@ -713,7 +714,7 @@ export type ProjectsListQueryResult = Array<{
       media?: unknown
       _type: 'file'
     } | null
-  } | null
+  }
   mainHoverImage: {
     asset: {
       _id: string
@@ -893,7 +894,7 @@ declare module '@sanity/client' {
     '\n  *[_type == "project" && defined(slug.current)]{ "slug": slug.current }\n': ProjectSlugsQueryResult
     '\n  {\n    "all": *[_type == "project" && defined(slug.current)] | order(orderRank asc){\n      "slug": slug.current,\n      projectName,\n      clientName\n    }\n  }\n': AdjacentProjectsQueryResult
     '\n  *[_type == "project" && slug.current == $slug][0]{\n    _id,\n    projectName,\n    "slug": slug.current,\n    projectNumber,\n    clientName,\n    projectInfo,\n    projectOverview,\n    info,\n    scope,\n    credits,\n    mainHoverImage{..., "asset": asset->},\n    projectMedia[]{\n      type,\n      "image": image{..., "asset": asset->},\n      "video": video{..., "asset": asset->},\n      imageInfo\n    },\n    filters[]->{ _id, title, "slug": slug.current },\n    seo\n  }\n': ProjectBySlugQueryResult
-    '\n  *[\n    _type == "project"\n    && defined(slug.current)\n    && (count($filters) == 0 || count(filters[@->slug.current in $filters]) > 0)\n  ] | order(orderRank asc){\n    _id,\n    projectName,\n    "slug": slug.current,\n    clientName,\n    "mainMedia": projectMedia[0]{\n      type,\n      "image": image{..., "asset": asset->},\n      "video": video{..., "asset": asset->}\n    },\n    mainHoverImage{..., "asset": asset->},\n    filters[]->{ "slug": slug.current }\n  }\n': ProjectsListQueryResult
+    '\n  *[\n    _type == "project"\n    && defined(slug.current)\n    && (count($filters) == 0 || count(filters[@->slug.current in $filters]) > 0)\n  ] | order(orderRank asc){\n    _id,\n    projectName,\n    "slug": slug.current,\n    clientName,\n    mainMedia{\n      type,\n      "image": image{..., "asset": asset->},\n      "video": video{..., "asset": asset->}\n    },\n    mainHoverImage{..., "asset": asset->},\n    filters[]->{ "slug": slug.current }\n  }\n': ProjectsListQueryResult
     '\n  *[_type == "filterCategory"] | order(orderRank asc){\n    _id,\n    title,\n    "slug": slug.current\n  }\n': FiltersQueryResult
     '\n  *[_id == "about"][0]{\n    "bgColor": bgColor.rgb,\n    bioImage{..., "asset": asset->},\n    bioName,\n    bio,\n    availabilityStatus,\n    selectedClients,\n    exhibitions,\n    email,\n    cv{..., "asset": asset->},\n    instagramUrl\n  }\n': AboutQueryResult
     '\n  *[_id == "settings"][0]{\n    defaultSeo,\n    "bgColor": bgColor.rgb\n  }\n': SettingsQueryResult

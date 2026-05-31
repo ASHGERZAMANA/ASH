@@ -72,6 +72,14 @@ export const project = defineType({
       of: [{type: 'block'}],
     }),
     defineField({
+      name: 'mainMedia',
+      title: 'Main media',
+      type: 'media',
+      group: 'media',
+      description: 'Used as the project image on the homepage grid.',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
       name: 'mainHoverImage',
       title: 'Main hover image',
       type: 'image',
@@ -96,9 +104,22 @@ export const project = defineType({
       title: 'Project media',
       type: 'array',
       group: 'media',
-      description: 'First item is used as the main image on the homepage and project page.',
+      description: 'Shown on the project page. First item is the initial big image. Each item requires an Image info.',
       of: [{type: 'media'}],
-      validation: (rule) => rule.required().min(1),
+      validation: (rule) =>
+        rule
+          .required()
+          .min(1)
+          .custom((items) => {
+            if (!Array.isArray(items)) return true
+            const missing = items
+              .map((item, i) => ({i, info: (item as {imageInfo?: unknown[]} | null)?.imageInfo}))
+              .filter(({info}) => !Array.isArray(info) || info.length === 0)
+            if (missing.length === 0) return true
+            return `Image info is required on every project media item (missing on item ${missing
+              .map(({i}) => i + 1)
+              .join(', ')})`
+          }),
     }),
     defineField({
       name: 'filters',
@@ -119,8 +140,8 @@ export const project = defineType({
     select: {
       title: 'projectName',
       subtitle: 'clientName',
-      type: 'projectMedia.0.type',
-      image: 'projectMedia.0.image',
+      type: 'mainMedia.type',
+      image: 'mainMedia.image',
     },
     prepare({title, subtitle, type, image}) {
       return {
