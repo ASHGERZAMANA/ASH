@@ -1,4 +1,5 @@
 import {sanityFetch} from '@/sanity/lib/live'
+import {unbrandStega} from '@/sanity/lib/stega'
 import {projectsListQuery} from '@/sanity/lib/queries'
 
 import {ProjectGrid} from '@/app/components/projects/ProjectGrid'
@@ -12,10 +13,11 @@ export default async function HomePage({searchParams}: {searchParams: SearchPara
   const view = parseView(sp.view)
   const filters = parseFilters(sp.filter)
 
-  const {data: projects} = await sanityFetch({
+  const {data} = await sanityFetch({
     query: projectsListQuery,
     params: {filters},
   })
+  const projects = unbrandStega(data)
 
   return (
     <section className="pt-37">
