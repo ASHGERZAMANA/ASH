@@ -652,12 +652,15 @@ export type ProjectBySlugQueryResult = {
 
 // Source: sanity/lib/queries.ts
 // Variable: projectsListQuery
-// Query: *[    _type == "project"    && defined(slug.current)    && (count($filters) == 0 || count(filters[@->slug.current in $filters]) > 0)  ] | order(orderRank asc){    _id,    projectName,    "slug": slug.current,    clientName,    mainMedia{      type,      "image": image{..., "asset": asset->},      "video": video{..., "asset": asset->}    },    mainHoverImage{..., "asset": asset->},    filters[]->{ "slug": slug.current }  }
+// Query: *[    _type == "project"    && defined(slug.current)    && (count($filters) == 0 || count(filters[@->slug.current in $filters]) > 0)  ] | order(orderRank asc){    _id,    projectName,    "slug": slug.current,    clientName,    projectNumber,    "scopeText": pt::text(scope),    "mediaCount": count(projectMedia),    mainMedia{      type,      "image": image{..., "asset": asset->},      "video": video{..., "asset": asset->}    },    mainHoverImage{..., "asset": asset->},    "previewMedia": projectMedia[0...4]{      type,      "image": image{..., "asset": asset->},      "video": video{..., "asset": asset->}    },    filters[]->{ "slug": slug.current }  }
 export type ProjectsListQueryResult = Array<{
   _id: string
   projectName: string
   slug: string
   clientName: string | null
+  projectNumber: string | null
+  scopeText: string
+  mediaCount: number
   mainMedia: {
     type: 'image' | 'video'
     image: {
@@ -744,6 +747,63 @@ export type ProjectsListQueryResult = Array<{
     alt?: string
     _type: 'image'
   } | null
+  previewMedia: Array<{
+    type: 'image' | 'video'
+    image: {
+      asset: {
+        _id: string
+        _type: 'sanity.imageAsset'
+        _createdAt: string
+        _updatedAt: string
+        _rev: string
+        originalFilename?: string
+        label?: string
+        title?: string
+        description?: string
+        altText?: string
+        sha1hash: string
+        extension: string
+        mimeType: string
+        size: number
+        assetId: string
+        uploadId?: string
+        path: string
+        url: string
+        metadata?: SanityImageMetadata
+        source?: SanityAssetSourceData
+      } | null
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      alt?: string
+      _type: 'image'
+    } | null
+    video: {
+      asset: {
+        _id: string
+        _type: 'sanity.fileAsset'
+        _createdAt: string
+        _updatedAt: string
+        _rev: string
+        originalFilename?: string
+        label?: string
+        title?: string
+        description?: string
+        altText?: string
+        sha1hash: string
+        extension: string
+        mimeType: string
+        size: number
+        assetId: string
+        uploadId?: string
+        path: string
+        url: string
+        source?: SanityAssetSourceData
+      } | null
+      media?: unknown
+      _type: 'file'
+    } | null
+  }>
   filters: Array<{
     slug: string
   }> | null
@@ -757,6 +817,20 @@ export type FiltersQueryResult = Array<{
   title: string
   slug: string
 }>
+
+// Source: sanity/lib/queries.ts
+// Variable: aboutContactQuery
+// Query: *[_id == "about"][0]{ email, instagramUrl }
+export type AboutContactQueryResult =
+  | {
+      email: null
+      instagramUrl: null
+    }
+  | {
+      email: string | null
+      instagramUrl: string | null
+    }
+  | null
 
 // Source: sanity/lib/queries.ts
 // Variable: aboutQuery
@@ -894,8 +968,9 @@ declare module '@sanity/client' {
     '\n  *[_type == "project" && defined(slug.current)]{ "slug": slug.current }\n': ProjectSlugsQueryResult
     '\n  {\n    "all": *[_type == "project" && defined(slug.current)] | order(orderRank asc){\n      "slug": slug.current,\n      projectName,\n      clientName\n    }\n  }\n': AdjacentProjectsQueryResult
     '\n  *[_type == "project" && slug.current == $slug][0]{\n    _id,\n    projectName,\n    "slug": slug.current,\n    projectNumber,\n    clientName,\n    projectInfo,\n    projectOverview,\n    info,\n    scope,\n    credits,\n    mainHoverImage{..., "asset": asset->},\n    projectMedia[]{\n      type,\n      "image": image{..., "asset": asset->},\n      "video": video{..., "asset": asset->},\n      imageInfo\n    },\n    filters[]->{ _id, title, "slug": slug.current },\n    seo\n  }\n': ProjectBySlugQueryResult
-    '\n  *[\n    _type == "project"\n    && defined(slug.current)\n    && (count($filters) == 0 || count(filters[@->slug.current in $filters]) > 0)\n  ] | order(orderRank asc){\n    _id,\n    projectName,\n    "slug": slug.current,\n    clientName,\n    mainMedia{\n      type,\n      "image": image{..., "asset": asset->},\n      "video": video{..., "asset": asset->}\n    },\n    mainHoverImage{..., "asset": asset->},\n    filters[]->{ "slug": slug.current }\n  }\n': ProjectsListQueryResult
+    '\n  *[\n    _type == "project"\n    && defined(slug.current)\n    && (count($filters) == 0 || count(filters[@->slug.current in $filters]) > 0)\n  ] | order(orderRank asc){\n    _id,\n    projectName,\n    "slug": slug.current,\n    clientName,\n    projectNumber,\n    "scopeText": pt::text(scope),\n    "mediaCount": count(projectMedia),\n    mainMedia{\n      type,\n      "image": image{..., "asset": asset->},\n      "video": video{..., "asset": asset->}\n    },\n    mainHoverImage{..., "asset": asset->},\n    "previewMedia": projectMedia[0...4]{\n      type,\n      "image": image{..., "asset": asset->},\n      "video": video{..., "asset": asset->}\n    },\n    filters[]->{ "slug": slug.current }\n  }\n': ProjectsListQueryResult
     '\n  *[_type == "filterCategory"] | order(orderRank asc){\n    _id,\n    title,\n    "slug": slug.current\n  }\n': FiltersQueryResult
+    '\n  *[_id == "about"][0]{ email, instagramUrl }\n': AboutContactQueryResult
     '\n  *[_id == "about"][0]{\n    "bgColor": bgColor.rgb,\n    bioImage{..., "asset": asset->},\n    bioName,\n    bio,\n    availabilityStatus,\n    selectedClients,\n    exhibitions,\n    email,\n    cv{..., "asset": asset->},\n    instagramUrl\n  }\n': AboutQueryResult
     '\n  *[_id == "settings"][0]{\n    defaultSeo,\n    "bgColor": bgColor.rgb\n  }\n': SettingsQueryResult
   }

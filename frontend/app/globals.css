@@ -10,8 +10,130 @@ html {
   font-size: 10px;
 }
 
+:root {
+  /* Gap between sibling media: homepage hover previews, project-page dock. */
+  --media-gap: 1rem;
+}
+
+body {
+  background-color: #202020;
+  color: #ededed;
+}
+
 body:has(.is-not-found) header,
-body:has(.is-not-found) header a {
+body:has(.is-not-found) header a,
+body[data-menu-open='true'] header,
+body[data-menu-open='true'] header a,
+body[data-menu-open='true'] header button {
   color: #ffffff;
 }
 
+body[data-menu-open='true'] header a,
+body[data-menu-open='true'] header button,
+body[data-menu-open='true'] header span {
+  background-color: transparent;
+}
+
+body[data-menu-open='true'] header button {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+
+/* Homepage staircase grid: one project per row, three to a viewport. */
+@media (min-width: 48rem) {
+  /*
+   * Each project owns its whole row — it is a 12-column grid of its own, with
+   * the card sitting in the slot the staircase puts it in. Spanning the row
+   * means hovering anywhere along it reveals the preview images.
+   */
+  .stair-item {
+    grid-column: 1 / -1;
+    grid-row: var(--stair-row);
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  /* Left → middle → right, then back to left. */
+  .stair-item > * {
+    grid-column: var(--stair-col) / span 4;
+  }
+}
+
+/*
+ * Hovering anywhere in a project's row reveals its first three media, on the
+ * same line as its main image and flush with the right edge of the content.
+ */
+.stair-previews {
+  display: none;
+}
+
+@media (min-width: 48rem) {
+  .stair-previews {
+    position: absolute;
+    top: 0;
+    right: calc(-1 * var(--stair-right, 0%));
+    display: flex;
+    gap: var(--media-gap);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .stair-item:hover .stair-previews {
+    opacity: 1;
+  }
+}
+
+/*
+ * Project page. The stage fills the viewport with the media and title anchored
+ * to the bottom, above a 4.8rem margin. Opening the thumbnail dock lifts the
+ * media and title — and only those — so the title comes to rest on the dock.
+ */
+@media (min-width: 48rem) {
+  .project-stage {
+    /* Sized so the lifted media still clears the navbar on shorter screens. */
+    --media: min(62rem, calc(100svh - 32rem));
+    /* 14rem dock less the 4.8rem the title already sits above the bottom. */
+    --lift: 0rem;
+    height: 100svh;
+    justify-content: flex-end;
+    padding-bottom: 4.8rem;
+  }
+
+  body[data-dock-open='true'] .project-stage {
+    --lift: 9.2rem;
+  }
+
+  /* The row fills the stage, so prev/next sits near the top of the page while
+     the media and the info block stay aligned along its bottom edge. */
+  .project-row {
+    flex: 1;
+    min-height: 0;
+  }
+
+  .project-media {
+    width: var(--media);
+    height: var(--media);
+    flex-shrink: 0;
+    align-self: flex-end;
+  }
+
+  /* `translate` rather than `transform`, so it never collides with Tailwind's
+     transform utilities on these elements. */
+  .project-media,
+  .project-title {
+    translate: 0 calc(-1 * var(--lift));
+    transition: translate 400ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .project-title {
+    width: var(--media);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .project-media,
+    .project-title {
+      transition: none;
+    }
+  }
+}

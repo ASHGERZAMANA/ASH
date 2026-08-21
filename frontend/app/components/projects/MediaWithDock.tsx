@@ -50,6 +50,7 @@ function MediaDisplay({media}: {media: Media}) {
         fill
         sizes="815px"
         className="object-contain"
+        style={{objectPosition: 'left bottom'}}
       />
     )
   }
@@ -116,7 +117,7 @@ export function MediaProvider({
           <div
             onMouseEnter={() => setIsDockOpen(true)}
             onMouseLeave={() => setIsDockOpen(false)}
-            className={`fixed inset-x-0 bottom-0 z-40 flex h-56 items-center gap-4 overflow-x-auto px-5 transition-transform duration-300 ${
+            className={`fixed inset-x-0 bottom-0 z-40 flex h-56 items-center gap-[var(--media-gap)] overflow-x-auto px-8 transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
               isDockOpen ? 'translate-y-0' : 'translate-y-full'
             }`}
           >
@@ -125,6 +126,9 @@ export function MediaProvider({
                 key={i}
                 type="button"
                 onClick={() => setActiveIndex(i)}
+                // Hovering previews a thumbnail; whichever was hovered last stays.
+                onMouseEnter={() => setActiveIndex(i)}
+                onFocus={() => setActiveIndex(i)}
                 className="relative aspect-square h-36 shrink-0 overflow-hidden"
                 aria-label={`Show media ${i + 1}`}
               >
@@ -153,11 +157,16 @@ export function ActiveMedia() {
     <>
       <div
         ref={ref}
-        onClick={() => setActiveIndex((i) => (i + 1) % total)}
+        onClick={(e) => {
+          // Right half steps forward through the media, left half steps back.
+          const {left, width} = e.currentTarget.getBoundingClientRect()
+          const step = e.clientX - left < width / 2 ? -1 : 1
+          setActiveIndex((i) => (i + step + total) % total)
+        }}
         onMouseEnter={(e) => setCursor({x: e.clientX, y: e.clientY, visible: true})}
         onMouseMove={(e) => setCursor({x: e.clientX, y: e.clientY, visible: true})}
         onMouseLeave={() => setCursor((c) => ({...c, visible: false}))}
-        className="relative flex aspect-square w-full cursor-none items-center justify-center md:size-260 md:shrink-0"
+        className="project-media relative flex aspect-square w-full cursor-none items-end justify-start"
       >
         {active && <MediaDisplay media={active} />}
       </div>

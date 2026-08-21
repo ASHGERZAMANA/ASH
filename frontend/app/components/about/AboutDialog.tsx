@@ -26,12 +26,12 @@ export function AboutDialog({open, children}: {open: boolean; children: React.Re
     <dialog
       ref={ref}
       onClose={close}
-      className="m-0 h-full max-h-none w-full max-w-none border-0 bg-transparent p-0 backdrop:bg-black/0"
+      className="m-0 h-full max-h-none w-full max-w-none border-0 bg-transparent p-0 text-[#ededed] backdrop:bg-black/0"
     >
       <button
         type="button"
         onClick={close}
-        className="fixed right-5 top-4 z-10 uppercase"
+        className="fixed right-8 top-6 z-10 rounded-md bg-white/10 px-2 py-1 uppercase"
         aria-label="Close"
       >
         [ Close (×) ]
