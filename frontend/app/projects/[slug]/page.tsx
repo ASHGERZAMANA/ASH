@@ -11,6 +11,7 @@ import {
 import {client} from '@/sanity/lib/client'
 import {urlForImage} from '@/sanity/lib/image'
 import {sanityFetch} from '@/sanity/lib/live'
+import {unbrandStega} from '@/sanity/lib/stega'
 import {
   adjacentProjectsQuery,
   projectBySlugQuery,
@@ -69,7 +70,7 @@ export default async function ProjectPage({params}: {params: Params}) {
   const idx = all.findIndex((p) => p.slug === slug)
   const prev = idx > 0 ? all[idx - 1] : all[all.length - 1]
   const next = idx >= 0 && idx < all.length - 1 ? all[idx + 1] : all[0]
-  const projectMedia = project.projectMedia ?? []
+  const projectMedia = unbrandStega(project.projectMedia) ?? []
 
   return (
     <article className="flex flex-col gap-8 pt-37">
