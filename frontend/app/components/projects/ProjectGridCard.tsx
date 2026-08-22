@@ -57,11 +57,16 @@ export function ProjectGridCard({
           ))}
         </div>
       )}
-      <div className="mt-3 grid grid-cols-2 text-[20px] leading-tight uppercase">
-        <span>[{project.projectNumber || '—'}]</span>
-        <span>{project.clientName}</span>
+      <div
+        className={`mt-3 flex gap-[6rem] text-[1.4rem] leading-tight uppercase md:grid md:grid-cols-2 md:gap-0 md:text-[2rem] ${
+          right ? 'max-md:justify-end' : ''
+        }`}
+      >
+        <span className="shrink-0">[{project.projectNumber || '—'}]</span>
+        {/* min-w-0 so a long client name wraps instead of running off the card. */}
+        <span className="min-w-0">{project.clientName}</span>
       </div>
-      <div className="text-[20px] leading-tight text-neutral-500 uppercase">
+      <div className="text-[1.4rem] leading-tight text-neutral-500 uppercase md:text-[2rem]">
         {project.projectName}
       </div>
       {project.scopeText && (

@@ -13,6 +13,12 @@ export function AboutDialog({open, children}: {open: boolean; children: React.Re
     if (!dialog) return
     if (open && !dialog.open) dialog.showModal()
     if (!open && dialog.open) dialog.close()
+
+    if (open) document.body.dataset.aboutOpen = 'true'
+    else delete document.body.dataset.aboutOpen
+    return () => {
+      delete document.body.dataset.aboutOpen
+    }
   }, [open])
 
   function close() {
@@ -26,7 +32,7 @@ export function AboutDialog({open, children}: {open: boolean; children: React.Re
     <dialog
       ref={ref}
       onClose={close}
-      className="m-0 h-full max-h-none w-full max-w-none border-0 bg-transparent p-0 text-[#ededed] backdrop:bg-black/0"
+      className="m-0 h-full max-h-none w-full max-w-none overflow-y-auto overscroll-none border-0 bg-transparent p-0 text-[#ededed] backdrop:bg-black/0"
     >
       <button
         type="button"

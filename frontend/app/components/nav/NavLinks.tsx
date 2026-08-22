@@ -116,7 +116,7 @@ export function NavLinks({
       {/* MOBILE OVERLAY */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 z-30 flex flex-col gap-6 px-8 pt-24 pb-[2rem] text-white uppercase lg:hidden"
+          className="fixed inset-0 z-30 flex flex-col gap-6 overflow-y-auto overscroll-none px-8 pt-24 pb-[2rem] text-white uppercase lg:hidden"
           style={{backgroundColor: 'rgba(32, 32, 32, 0.95)'}}
         >
           <section className="flex flex-col gap-1">

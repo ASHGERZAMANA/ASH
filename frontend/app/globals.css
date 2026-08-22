@@ -20,6 +20,22 @@ body {
   color: #ededed;
 }
 
+/* No focus rings anywhere — the browser default blue outline is not wanted. */
+:focus,
+:focus-visible {
+  outline: none;
+}
+
+/*
+ * While the mobile menu or the About panel is open the page behind them is
+ * frozen, and neither surface rubber-bands past its own ends.
+ */
+body[data-menu-open='true'],
+body[data-about-open='true'] {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
 body:has(.is-not-found) header,
 body:has(.is-not-found) header a,
 body[data-menu-open='true'] header,

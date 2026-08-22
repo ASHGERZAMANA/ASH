@@ -68,7 +68,7 @@ export async function AboutContent() {
   ].filter((link) => link !== null)
 
   return (
-    <div className="min-h-full bg-[#202020] px-8 py-37 text-[#ededed]">
+    <div className="min-h-full bg-[#202020]/90 px-8 py-37 text-[#ededed]">
       {/* MOBILE — portrait and links stacked in a narrow left column */}
       <div className="grid grid-cols-[30%_1fr] items-start gap-x-[4.5rem] gap-y-[4.5rem] md:hidden">
         <div>{portrait}</div>

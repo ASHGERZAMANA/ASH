@@ -111,13 +111,13 @@ export function MediaProvider({
       {showDock && (
         <>
           <div
-            className="fixed inset-x-0 bottom-0 z-30 h-2.5"
+            className="fixed inset-x-0 bottom-0 z-30 hidden h-2.5 lg:block"
             onMouseEnter={() => setIsDockOpen(true)}
           />
           <div
             onMouseEnter={() => setIsDockOpen(true)}
             onMouseLeave={() => setIsDockOpen(false)}
-            className={`fixed inset-x-0 bottom-0 z-40 flex h-56 items-center gap-[var(--media-gap)] overflow-x-auto px-8 transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
+            className={`fixed inset-x-0 bottom-0 z-40 hidden h-56 items-center gap-[var(--media-gap)] lg:flex overflow-x-auto px-8 transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
               isDockOpen ? 'translate-y-0' : 'translate-y-full'
             }`}
           >
@@ -166,7 +166,7 @@ export function ActiveMedia() {
         onMouseEnter={(e) => setCursor({x: e.clientX, y: e.clientY, visible: true})}
         onMouseMove={(e) => setCursor({x: e.clientX, y: e.clientY, visible: true})}
         onMouseLeave={() => setCursor((c) => ({...c, visible: false}))}
-        className="project-media relative flex aspect-square w-full cursor-none items-end justify-start"
+        className="project-media relative flex aspect-square w-full cursor-none items-end justify-start max-md:order-1"
       >
         {active && <MediaDisplay media={active} />}
       </div>

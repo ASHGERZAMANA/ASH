@@ -76,10 +76,10 @@ export default async function ProjectPage({params}: {params: Params}) {
     <article className="project-stage flex flex-col gap-8 pt-37">
       <MediaProvider projectMedia={projectMedia}>
         {/* TOP CONTAINER — image (left) + prev/next at top, content at bottom of column */}
-        <div className="project-row flex flex-col gap-8 md:flex-row md:items-stretch md:justify-between">
+        <div className="project-row flex flex-col gap-8 max-md:contents md:flex-row md:items-stretch md:justify-between">
           <ActiveMedia />
 
-          <div className="flex flex-col md:w-160 md:shrink-0 md:justify-between md:pt-32">
+          <div className="flex flex-col gap-8 max-md:order-3 md:w-160 md:shrink-0 md:justify-between md:gap-0 md:pt-32">
             <nav className="flex items-center justify-between uppercase">
               {prev?.slug ? (
                 <Link href={`/projects/${prev.slug}`}>Previous work</Link>
@@ -130,7 +130,7 @@ export default async function ProjectPage({params}: {params: Params}) {
       </MediaProvider>
 
       {/* BOTTOM CONTAINER — client + project title, width matches image above */}
-      <div className="project-title flex flex-wrap items-baseline gap-x-12 gap-y-2 text-5xl uppercase md:justify-between md:text-[2.8rem]">
+      <div className="project-title flex flex-wrap items-baseline gap-x-12 gap-y-2 text-[1.4rem] uppercase max-md:order-2 max-md:flex-col max-md:gap-y-0 md:justify-between md:text-[2.8rem]">
         {project.clientName && (
           <span className="whitespace-nowrap">{project.clientName}</span>
         )}
