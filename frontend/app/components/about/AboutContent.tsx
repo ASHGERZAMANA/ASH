@@ -77,7 +77,7 @@ export async function AboutContent() {
           {bio}
         </div>
 
-        <div className="flex flex-col items-start gap-[2.5rem]">
+        <div className="flex flex-col items-start gap-[1.2rem]">
           {links.map((link) => (
             <a
               key={link.label}
