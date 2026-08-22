@@ -9,9 +9,7 @@ import {Suspense} from 'react'
 import {AboutContent} from '@/app/components/about/AboutContent'
 import {AboutDialogShell} from '@/app/components/about/AboutDialogShell'
 import {Nav} from '@/app/components/nav/Nav'
-import {rgbToCss} from '@/sanity/lib/color'
-import {sanityFetch, SanityLive} from '@/sanity/lib/live'
-import {settingsQuery} from '@/sanity/lib/queries'
+import {SanityLive} from '@/sanity/lib/live'
 
 const quadrantMono = localFont({
   src: './fonts/QuadrantTextMono-Regular.woff2',
@@ -25,20 +23,15 @@ export const metadata: Metadata = {
 }
 
 export default async function RootLayout({children}: {children: React.ReactNode}) {
-  const [{isEnabled: isDraftMode}, {data: settings}] = await Promise.all([
-    draftMode(),
-    sanityFetch({query: settingsQuery, stega: false}),
-  ])
-
-  const bgColor = rgbToCss(settings?.bgColor)
+  const {isEnabled: isDraftMode} = await draftMode()
 
   return (
     <html lang="en" className={quadrantMono.variable}>
-      <body className="font-mono" style={bgColor ? {backgroundColor: bgColor} : undefined}>
+      <body className="font-mono max-md:py-[1.2rem]">
         {isDraftMode && <VisualEditing />}
         <SanityLive />
         <Nav />
-        <main className="px-5">{children}</main>
+        <main className="px-8">{children}</main>
         <Suspense>
           <AboutDialogShell>
             <AboutContent />

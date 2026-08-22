@@ -2,20 +2,36 @@
 
 import Link from 'next/link'
 import {useSearchParams} from 'next/navigation'
-import {Fragment, useState} from 'react'
+import {Fragment, useEffect, useState} from 'react'
 
 import {buildHref, parseFilters, parseView, toggleFilter} from '@/app/lib/params'
 
 type Filter = {_id: string; title: string; slug: string}
 
-const PILL = 'rounded-md bg-black/10 px-2 py-1 uppercase'
+const PILL = 'rounded-md bg-white/10 px-2 py-1 uppercase'
 
-export function NavLinks({filters: items}: {filters: Filter[]}) {
+export function NavLinks({
+  filters: items,
+  email,
+  instagramUrl,
+}: {
+  filters: Filter[]
+  email: string | null
+  instagramUrl: string | null
+}) {
   const searchParams = useSearchParams()
   const view = parseView(searchParams.get('view') ?? undefined)
   const filters = parseFilters(searchParams.get('filter') ?? undefined)
   const noneActive = filters.length === 0
   const [mobileOpen, setMobileOpen] = useState(false)
+
+  useEffect(() => {
+    if (mobileOpen) document.body.dataset.menuOpen = 'true'
+    else delete document.body.dataset.menuOpen
+    return () => {
+      delete document.body.dataset.menuOpen
+    }
+  }, [mobileOpen])
 
   const aboutHref = buildHref({view, filters, about: true})
 
@@ -83,7 +99,7 @@ export function NavLinks({filters: items}: {filters: Filter[]}) {
       </div>
 
       {/* MOBILE NAV — below lg */}
-      <div className="flex w-full items-center justify-between lg:hidden">
+      <div className="relative z-50 flex w-full items-center justify-between lg:hidden">
         <button
           type="button"
           onClick={() => setMobileOpen((v) => !v)}
@@ -100,11 +116,11 @@ export function NavLinks({filters: items}: {filters: Filter[]}) {
       {/* MOBILE OVERLAY */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 top-14 z-30 flex flex-col gap-6 px-5 pt-6 pb-10 text-white uppercase lg:hidden"
+          className="fixed inset-0 z-30 flex flex-col gap-6 px-8 pt-24 pb-[2rem] text-white uppercase lg:hidden"
           style={{backgroundColor: 'rgba(32, 32, 32, 0.95)'}}
         >
           <section className="flex flex-col gap-1">
-            <span className={`${PILL} self-start text-white`}>[ View mode ]</span>
+            <span className="self-start rounded-md bg-white/10 py-1 uppercase text-white">[ View mode ]</span>
             <Link
               href={buildHref({view: 'grid', filters})}
               onClick={() => setMobileOpen(false)}
@@ -124,7 +140,7 @@ export function NavLinks({filters: items}: {filters: Filter[]}) {
           </section>
 
           <section className="flex flex-col gap-1">
-            <span className={`${PILL} self-start text-white`}>[ Filter ]</span>
+            <span className="self-start rounded-md bg-white/10 py-1 uppercase text-white">[ Filter ]</span>
             <Link
               href={buildHref({view, filters: []})}
               onClick={() => setMobileOpen(false)}
@@ -148,6 +164,30 @@ export function NavLinks({filters: items}: {filters: Filter[]}) {
               )
             })}
           </section>
+
+          {(email || instagramUrl) && (
+            <div className="mt-auto flex items-center justify-between uppercase">
+              {email ? (
+                <a href={`mailto:${email}`} onClick={() => setMobileOpen(false)}>
+                  [ Email ]
+                </a>
+              ) : (
+                <span />
+              )}
+              {instagramUrl ? (
+                <a
+                  href={instagramUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  [ Instagram ]
+                </a>
+              ) : (
+                <span />
+              )}
+            </div>
+          )}
         </div>
       )}
     </>

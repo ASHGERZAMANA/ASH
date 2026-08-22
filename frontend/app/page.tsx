@@ -20,7 +20,7 @@ export default async function HomePage({searchParams}: {searchParams: SearchPara
   const projects = unbrandStega(data)
 
   return (
-    <section className="pt-37">
+    <section className="pt-37 pb-8">
       {view === 'grid' ? (
         <ProjectGrid projects={projects ?? []} />
       ) : (

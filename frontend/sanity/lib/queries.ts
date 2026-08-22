@@ -48,12 +48,20 @@ export const projectsListQuery = defineQuery(`
     projectName,
     "slug": slug.current,
     clientName,
+    projectNumber,
+    "scopeText": pt::text(scope),
+    "mediaCount": count(projectMedia),
     mainMedia{
       type,
       "image": image{..., "asset": asset->},
       "video": video{..., "asset": asset->}
     },
     mainHoverImage{..., "asset": asset->},
+    "previewMedia": projectMedia[0...4]{
+      type,
+      "image": image{..., "asset": asset->},
+      "video": video{..., "asset": asset->}
+    },
     filters[]->{ "slug": slug.current }
   }
 `)
@@ -64,6 +72,10 @@ export const filtersQuery = defineQuery(`
     title,
     "slug": slug.current
   }
+`)
+
+export const aboutContactQuery = defineQuery(`
+  *[_id == "about"][0]{ email, instagramUrl }
 `)
 
 export const aboutQuery = defineQuery(`
