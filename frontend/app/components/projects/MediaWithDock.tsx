@@ -166,14 +166,14 @@ export function ActiveMedia() {
         onMouseEnter={(e) => setCursor({x: e.clientX, y: e.clientY, visible: true})}
         onMouseMove={(e) => setCursor({x: e.clientX, y: e.clientY, visible: true})}
         onMouseLeave={() => setCursor((c) => ({...c, visible: false}))}
-        className="project-media relative flex aspect-square w-full cursor-none items-end justify-start max-md:order-1"
+        className="project-media relative flex aspect-square w-full items-end justify-start max-md:order-1 lg:cursor-none"
       >
         {active && <MediaDisplay media={active} />}
       </div>
 
       {cursor.visible && (
         <div
-          className="pointer-events-none fixed z-50 text-white uppercase mix-blend-difference"
+          className="pointer-events-none fixed z-50 hidden text-white uppercase mix-blend-difference lg:block"
           style={{
             left: cursor.x,
             top: cursor.y,
