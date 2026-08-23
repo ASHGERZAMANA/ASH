@@ -154,21 +154,33 @@ body[data-menu-open='true'] header button:not([data-pill]) {
     }
   }
 
-  /*
-   * Short viewports — landscape phones, small tablets — have no height to
-   * spend, so `100svh - 32rem` collapses the media to nothing. Size it from
-   * the width instead and let the page scroll.
-   */
-  @media (max-height: 40rem) {
-    .project-stage {
-      --media: min(62rem, 42vw);
-      height: auto;
-    }
+}
 
-    .project-media,
-    .project-title {
-      translate: none;
-    }
+/*
+ * Short viewports — landscape phones, small tablets — have no height to spend,
+ * so `100svh - 32rem` collapses the media to nothing. At any width the media is
+ * sized from the width instead, sits left, and the page scrolls.
+ */
+@media (max-height: 40rem) {
+  .project-stage {
+    --media: min(62rem, 42vw);
+    height: auto;
+  }
+
+  .project-media {
+    width: var(--media);
+    height: var(--media);
+    flex-shrink: 0;
+    align-self: flex-start;
+  }
+
+  .project-title {
+    width: var(--media);
+  }
+
+  .project-media,
+  .project-title {
+    translate: none;
   }
 }
 
