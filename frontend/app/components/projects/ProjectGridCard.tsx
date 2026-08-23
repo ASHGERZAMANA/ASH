@@ -34,7 +34,7 @@ export function ProjectGridCard({
       className={`relative block max-md:w-[62%] ${right ? 'max-md:ml-auto max-md:text-right' : ''}`}
     >
       {project.mainMedia && (
-        <div className={`max-md:w-[56%] md:h-[17vh] ${right ? 'max-md:ml-auto' : ''}`}>
+        <div className={`max-md:w-[56%] md:h-[clamp(12rem,17vh,20rem)] ${right ? 'max-md:ml-auto' : ''}`}>
           <CardMedia
             media={project.mainMedia}
             sizes={SIZES}
@@ -46,7 +46,7 @@ export function ProjectGridCard({
       {previews.length > 0 && (
         <div className="stair-previews">
           {previews.map((media, i) => (
-            <div key={i} className="h-[17vh]">
+            <div key={i} className="h-[clamp(12rem,17vh,20rem)]">
               <CardMedia
                 media={media}
                 sizes={PREVIEW_SIZES}

@@ -168,7 +168,12 @@ export function NavLinks({
           {(email || instagramUrl) && (
             <div className="mt-auto flex items-center justify-between uppercase">
               {email ? (
-                <a href={`mailto:${email}`} onClick={() => setMobileOpen(false)}>
+                <a
+                  href={`mailto:${email}`}
+                  onClick={() => setMobileOpen(false)}
+                  className={PILL}
+                  data-pill
+                >
                   [ Email ]
                 </a>
               ) : (
@@ -180,6 +185,8 @@ export function NavLinks({
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setMobileOpen(false)}
+                  className={PILL}
+                  data-pill
                 >
                   [ Instagram ]
                 </a>

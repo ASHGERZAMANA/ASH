@@ -44,13 +44,14 @@ body[data-menu-open='true'] header button {
   color: #ffffff;
 }
 
-body[data-menu-open='true'] header a,
-body[data-menu-open='true'] header button,
-body[data-menu-open='true'] header span {
+/* The nav's own pills flatten while the menu is open — [data-pill] opts out. */
+body[data-menu-open='true'] header a:not([data-pill]),
+body[data-menu-open='true'] header button:not([data-pill]),
+body[data-menu-open='true'] header span:not([data-pill]) {
   background-color: transparent;
 }
 
-body[data-menu-open='true'] header button {
+body[data-menu-open='true'] header button:not([data-pill]) {
   padding-left: 0;
   padding-right: 0;
 }
@@ -152,4 +153,41 @@ body[data-menu-open='true'] header button {
       transition: none;
     }
   }
+
+  /*
+   * Short viewports — landscape phones, small tablets — have no height to
+   * spend, so `100svh - 32rem` collapses the media to nothing. Size it from
+   * the width instead and let the page scroll.
+   */
+  @media (max-height: 40rem) {
+    .project-stage {
+      --media: min(62rem, 42vw);
+      height: auto;
+    }
+
+    .project-media,
+    .project-title {
+      translate: none;
+    }
+  }
 }
+
+/*
+ * About on short viewports — landscape phones — uses the stacked layout
+ * rather than the five-column one, which has no room to breathe there.
+ */
+@media (max-height: 40rem) {
+  .about-panel {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+
+  .about-stack {
+    display: grid;
+  }
+
+  .about-wide {
+    display: none;
+  }
+}
+

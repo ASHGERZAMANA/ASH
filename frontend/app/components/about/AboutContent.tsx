@@ -68,9 +68,9 @@ export async function AboutContent() {
   ].filter((link) => link !== null)
 
   return (
-    <div className="min-h-full bg-[#202020]/90 px-8 py-37 text-[#ededed]">
+    <div className="about-panel min-h-full bg-[#202020]/90 px-8 py-37 text-[#ededed]">
       {/* MOBILE — portrait and links stacked in a narrow left column */}
-      <div className="grid grid-cols-[30%_1fr] items-start gap-x-[4.5rem] gap-y-[4.5rem] md:hidden">
+      <div className="about-stack grid grid-cols-[30%_1fr] items-start gap-x-[4.5rem] gap-y-[4.5rem] md:hidden">
         <div>{portrait}</div>
         <div className="flex flex-col gap-[3rem]">
           {about.bioName && <p className="uppercase">{about.bioName}</p>}
@@ -98,7 +98,7 @@ export async function AboutContent() {
       </div>
 
       {/* DESKTOP — portrait, name, bio, then the two lists */}
-      <div className="hidden items-start gap-[9rem] md:flex">
+      <div className="about-wide hidden items-start gap-[9rem] md:flex">
         {/* Sized by the portrait, so the links and availability line up with its foot. */}
         <div className="flex basis-[58%] items-stretch gap-[4.5rem]">
           <div className="w-[13%] shrink-0">{portrait}</div>
