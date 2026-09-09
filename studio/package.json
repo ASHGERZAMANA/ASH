@@ -19,7 +19,7 @@
   "dependencies": {
     "@sanity/assist": "^6.0.4",
     "@sanity/color-input": "^6.0.5",
-    "@sanity/icons": "^3.8.0",
+    "@sanity/icons": "^5.2.1",
     "@sanity/orderable-document-list": "2.0.23",
     "@sanity/vision": "^6.13.1",
     "date-fns": "^4.1.0",
@@ -32,8 +32,8 @@
     "styled-components": "^6.3.12"
   },
   "devDependencies": {
-    "@sanity/eslint-config-studio": "^6.0.0",
+    "@sanity/eslint-config-studio": "^7.0.0",
     "@types/react": "^19.2.14",
-    "typescript": "^5.9.3"
+    "typescript": "^7.0.2"
   }
 }
