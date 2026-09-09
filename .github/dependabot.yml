@@ -1,0 +1,25 @@
+# Keeps dependency drift off your plate: security fixes and patch updates
+# arrive as pull requests instead of as alerts you have to chase.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    # One PR a week for the whole tree rather than a dozen.
+    groups:
+      patch-and-minor:
+        update-types:
+          - patch
+          - minor
+      majors:
+        update-types:
+          - major
+    open-pull-requests-limit: 3
+    labels:
+      - dependencies
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
