@@ -16,7 +16,25 @@ export default defineCliConfig({
     dataset,
   },
   studioHost: process.env.SANITY_STUDIO_STUDIO_HOST || '', // Visit https://www.sanity.io/docs/studio/environment-variables to learn more about using environment variables for local & production.
-  autoUpdates: true,
+  deployment: {
+    // Deployed at https://ashagereh.sanity.studio — the id keeps `sanity deploy`
+    // from prompting for it.
+    appId: 'casisggxy6idzk0u6tqbj3og',
+    autoUpdates: true,
+  },
+  /**
+   * lexorank (via @sanity/orderable-document-list) is CommonJS, and the CLI
+   * loads the studio config through a Vite SSR worker that inlines every
+   * dependency — which makes CJS blow up on `exports is not defined`. Keeping
+   * it external lets Node require it as the CJS module it is.
+   */
+  vite: (config) => ({
+    ...config,
+    ssr: {
+      ...config.ssr,
+      external: [...((config.ssr?.external as string[]) ?? []), 'lexorank'],
+    },
+  }),
   typegen: {
     path: './src/**/*.{ts,tsx,js,jsx}',
     schema: '../sanity.schema.json',
